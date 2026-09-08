@@ -6,7 +6,7 @@ import { PopularCategory } from "../components/PopularCategory";
 import { FeaturedJob } from "../components/FeaturedJob";
 import { Topcompanies } from "../components/Topcompanies";
 import { Testimonials } from "../components/Testimonials"; 
-import { Register } from "../components/register";
+import { Register } from "../components/Register";
 import { Footer } from "../components/Footer";
 
 export const Home = () => {
