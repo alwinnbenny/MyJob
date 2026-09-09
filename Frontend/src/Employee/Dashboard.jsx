@@ -1,7 +1,7 @@
 import { EmployeeSidebar } from "../components/EmployeeSidebar";
 import { EmployeeNavbar } from "../components/EmployeeNavbar";
 import { DashboardCard } from "../components/DashboardCard";
-import { applicants } from "../data/applicants";
+
 import { api } from "../config/axios";
 
 import {

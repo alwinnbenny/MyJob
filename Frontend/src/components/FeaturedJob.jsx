@@ -1,83 +1,25 @@
 import {
   ArrowRight,
   Bookmark,
-  Calendar,
   Clock,
   DollarSign,
   MapPin,
+  X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../config/axios";
+import { UserContext } from "../Context/UserContext";
 
 export const FeaturedJob = () => {
   const navigate = useNavigate();
-  // const jobLists = [
-  //   {
-  //     id: 1,
-  //     logo: "/logos/upwork.png",
-  //     title: "Senior UX Designer",
-  //     type: "Remote",
-  //     location: "Australia",
-  //     salary: "$30K-$35K",
-  //     days: "4 Days Remaining",
-  //     isSaved: false,
-  //   },
-  //   {
-  //     id: 2,
-  //     logo: "/logos/apple.png",
-  //     title: "Software Engineer",
-  //     type: "Full Time",
-  //     location: "China",
-  //     salary: "$50K-$60K",
-  //     days: "4 Days Remaining",
-  //     isSaved: false,
-  //   },
-  //   {
-  //     id: 3,
-  //     logo: "/logos/figma.png",
-  //     title: "Junior Graphic Designer",
-  //     type: "Full Time",
-  //     location: "Canada",
-  //     salary: "$50K-$70K",
-  //     days: "4 Days Remaining",
-  //     isSaved: false,
-  //   },
-  //   {
-  //     id: 4,
-  //     logo: "/logos/udemy.png",
-  //     title: "Product Designer",
-  //     type: "Full Time",
-  //     location: "United States",
-  //     salary: "$35K-$40K",
-  //     days: "4 Days Remaining",
-  //     isSaved: false,
-  //   },
-  //   {
-  //     id: 5,
-  //     logo: "/logos/facebook.png",
-  //     title: "Marketing Officer",
-  //     type: "Internship",
-  //     location: "Germany",
-  //     salary: "$50K-$90K",
-  //     days: "4 Days Remaining",
-  //     isSaved: false,
-  //   },
-  //   {
-  //     id: 6,
-  //     logo: "/logos/google.png",
-  //     title: "Interaction Designer",
-  //     type: "Full Time",
-  //     location: "France",
-  //     salary: "$5K-$10K",
-  //     days: "4 Days Remaining",
-  //     isSaved: false,
-  //   },;
-  // ];
 
   const [jobLists, setJobLists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     const fetchJobLists = async () => {
@@ -88,7 +30,11 @@ export const FeaturedJob = () => {
 
         console.log("joblistings:", response.data);
 
-        setJobLists(Array.isArray(response.data) ? response.data : response.data.jobLists || []);
+        setJobLists(
+          Array.isArray(response.data)
+            ? response.data
+            : response.data.jobLists || [],
+        );
       } catch (error) {
         console.log(
           "Get my jobs error:",
@@ -129,6 +75,14 @@ export const FeaturedJob = () => {
     }
 
     return `${days} Days Remaining`;
+  };
+
+  const handleApplyClick = (_id) => {
+    if (!user) {
+      setShowPopup(true);
+      return;
+    }
+    navigate(`/job/${_id}`);
   };
 
   const handleSaved = (id) => {
@@ -208,18 +162,12 @@ export const FeaturedJob = () => {
                   key={_id}
                   className="flex flex-col sm:flex-row sm:items-center sm:justify-between border border-secondary rounded-xl px-7 py-6 hover:border-[#0A65CC] hover:shadow-lg transition-all duration-300 gap-4"
                 >
-                  
-
                   <div className="flex items-center gap-5">
-                    
-
                     <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center bg-[#E7F0FA]">
-                      
                       <span className="text-2xl font-bold text-blue-600">
                         {company?.charAt(0)?.toUpperCase()}
                       </span>
                     </div>
-
 
                     <div>
                       <div className="flex items-center gap-3 mb-2">
@@ -255,11 +203,7 @@ export const FeaturedJob = () => {
                     </div>
                   </div>
 
-                 
-
                   <div className="flex items-center gap-3 self-start sm:self-center">
-                  
-
                     <button
                       className="p-2 border border-gray-200 rounded-md bg-[#E7F0FA] hover:text-[#0A65CC] transition-all cursor-pointer"
                       onClick={() => handleSaved(_id)}
@@ -271,11 +215,9 @@ export const FeaturedJob = () => {
                       )}
                     </button>
 
-                  
-
                     <button
                       className="flex items-center gap-2 bg-[#E7F0FA] text-[#0A65CC] px-6 py-3 hover:bg-[#0A65CC] hover:text-white transition-all cursor-pointer"
-                      onClick={() => navigate(`/job/${_id}`)}
+                      onClick={() => handleApplyClick(_id)}
                     >
                       Apply Now
                       <ArrowRight size={18} />
@@ -287,6 +229,47 @@ export const FeaturedJob = () => {
           </div>
         )}
       </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="relative w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl">
+            <button
+              onClick={() => setShowPopup(false)}
+              className="absolute right-4 top-4 text-gray-400 hover:text-gray-700"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="text-center">
+              <h2 className="text-2xl font-semibold text-gray-800">
+                Login Required
+              </h2>
+
+              <p className="mt-3 text-sm leading-6 text-gray-500">
+                You need to login before applying for this job. Please login to
+                continue with your application.
+              </p>
+            </div>
+
+            {/* Buttons */}
+            <div className="mt-7 flex gap-3">
+              <button
+                onClick={() => setShowPopup(false)}
+                className="flex-1 rounded-lg border border-gray-300 px-5 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 transition"
+              >
+                Back
+              </button>
+
+              <button
+                onClick={() => navigate("/sign-in")}
+                className="flex-1 rounded-lg bg-[#0A65CC] px-5 py-3 text-sm font-medium text-white hover:bg-[#0857ad] transition"
+              >
+                Login
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
