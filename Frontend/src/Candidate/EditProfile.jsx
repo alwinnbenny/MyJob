@@ -144,6 +144,7 @@ import { UserContext } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { EmployeeNavbar } from "../components/EmployeeNavbar";
 import { api } from "../config/axios";
+import { Notification } from "../components/Notification";
 
 export const CandidateEditProfile = () => {
   const { user, updateUser } = useContext(UserContext);
@@ -161,6 +162,12 @@ export const CandidateEditProfile = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [profileExists, setProfileExists] = useState(false);
+  const [notification, setNotification] = useState(null);
+
+  const showNotification = (message, type = "success") => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
  
 useEffect(()=>{
@@ -241,9 +248,9 @@ useEffect(()=>{
 
       updateUser(userResponse.data.user);
 
-      alert("Profile Updated Successfully!");
+      showNotification("Profile Updated Successfully!");
 
-      navigate("/candidate/view-profile");
+      setTimeout(() => navigate("/candidate/view-profile"), 1500);
     } catch (error) {
       console.log("Update profile error:", error.response?.data);
 
@@ -268,6 +275,11 @@ useEffect(()=>{
   return (
     <div className="flex flex-col min-h-screen">
       <EmployeeNavbar />
+
+      <Notification
+        notification={notification}
+        onClose={() => setNotification(null)}
+      />
 
       <div className="flex-1 bg-gray-100 p-8">
         <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow p-8">

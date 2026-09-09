@@ -529,6 +529,7 @@ import {
 
 import { Navbar } from "../components/Navbar";
 import { api } from "../config/axios";
+import { Notification } from "../components/Notification";
 
 export const JobDetailed = () => {
   const { id } = useParams();
@@ -538,6 +539,12 @@ export const JobDetailed = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [notification, setNotification] = useState(null);
+
+  const showNotification = (message, type = "success") => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   
   useEffect(() => {
@@ -638,16 +645,17 @@ const handleApplyJob = async () => {
 
     console.log("Application response:", response.data);
 
-    alert("Application submitted successfully!");
+    showNotification("Application submitted successfully!");
   } catch (error) {
     console.log(
       "Apply job error:",
       error.response?.data || error.message
     );
 
-    alert(
+    showNotification(
       error.response?.data?.message ||
-        "Something went wrong while applying for this job"
+        "Something went wrong while applying for this job",
+      "error"
     );
   }
 };
@@ -658,6 +666,11 @@ const handleApplyJob = async () => {
   return (
     <div>
       <Navbar />
+
+      <Notification
+        notification={notification}
+        onClose={() => setNotification(null)}
+      />
 
       
       <section className="bg-muted-foreground py-4 w-full min-h-18">

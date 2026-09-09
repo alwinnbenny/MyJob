@@ -14,6 +14,7 @@ import {
 import { EmployeeSidebar } from "../components/EmployeeSidebar";
 import { EmployeeNavbar } from "../components/EmployeeNavbar";
 import { api } from "../config/axios";
+import { Notification } from "../components/Notification";
 
 export const MyJob = () => {
   const { id } = useParams();
@@ -22,6 +23,12 @@ export const MyJob = () => {
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [notification, setNotification] = useState(null);
+
+  const showNotification = (message, type = "success") => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -102,15 +109,16 @@ export const MyJob = () => {
 
       console.log("Delete response:", response.data);
 
-      alert("Job deleted successfully");
+      showNotification("Job deleted successfully");
 
-      navigate("/my-job");
+      setTimeout(() => navigate("/my-job"), 1500);
     } catch (error) {
       console.log("Delete job error:", error.response?.data || error.message);
 
-      alert(
+      showNotification(
         error.response?.data?.message ||
           "Something went wrong while deleting the job",
+        "error"
       );
     }
   };
@@ -121,6 +129,11 @@ export const MyJob = () => {
 
       <div className="flex-1">
         <EmployeeNavbar />
+
+        <Notification
+          notification={notification}
+          onClose={() => setNotification(null)}
+        />
 
         <div className="bg-white w-full py-6">
           <div className="max-w-7xl mx-auto px-6">

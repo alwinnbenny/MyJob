@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { EmployeeNavbar } from "../components/EmployeeNavbar";
 import { EmployeeSidebar } from "../components/EmployeeSidebar";
 import { api } from "../config/axios";
+import { Notification } from "../components/Notification";
 
 export const EditJob = () => {
   const { id } = useParams();
@@ -27,6 +28,12 @@ export const EditJob = () => {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState("");
+  const [notification, setNotification] = useState(null);
+
+  const showNotification = (message, type = "success") => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   
   useEffect(() => {
@@ -118,9 +125,9 @@ export const EditJob = () => {
 
       console.log("Update response:", response.data);
 
-      alert("Job updated successfully");
+      showNotification("Job updated successfully!");
 
-      navigate(`/my-job`);
+      setTimeout(() => navigate(`/my-job`), 1500);
     } catch (error) {
       console.log(
         "Update job error:",
@@ -185,6 +192,11 @@ export const EditJob = () => {
 
       <div className="flex-1">
         <EmployeeNavbar />
+
+        <Notification
+          notification={notification}
+          onClose={() => setNotification(null)}
+        />
 
         <div className="bg-gray-100 min-h-screen py-8 px-6">
           <div className="max-w-5xl mx-auto">

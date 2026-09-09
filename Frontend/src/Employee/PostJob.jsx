@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { CheckCircle, XCircle, X } from "lucide-react";
 import { EmployeeSidebar } from "../components/EmployeeSidebar";
 import { EmployeeNavbar } from "../components/EmployeeNavbar";
 import { RichTextEditor } from "../components/RichTextEditor";
 import { useParams } from "react-router-dom";
 import { api } from "../config/axios";
+import { Notification } from "../components/Notification";
 
 
 
@@ -115,28 +115,10 @@ export const PostJob = () => {
 
         <div className="flex-1">
           {/* Notification */}
-          {notification && (
-            <div
-              className={`fixed top-6 right-6 z-50 flex items-center gap-3 px-5 py-4 rounded-xl shadow-lg text-white transition-all duration-300 ${
-                notification.type === "error" ? "bg-red-500" : "bg-green-500"
-              }`}
-            >
-              {notification.type === "error" ? (
-                <XCircle size={20} />
-              ) : (
-                <CheckCircle size={20} />
-              )}
-              <span className="text-sm font-medium">
-                {notification.message}
-              </span>
-              <button
-                onClick={() => setNotification(null)}
-                className="ml-2 opacity-75 hover:opacity-100"
-              >
-                <X size={16} />
-              </button>
-            </div>
-          )}
+          <Notification
+            notification={notification}
+            onClose={() => setNotification(null)}
+          />
 
           <div className="p-8">
             <div className="bg-white rounded-2xl shadow-sm p-8">

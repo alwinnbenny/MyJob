@@ -3,6 +3,7 @@ import { UserContext } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { EmployeeNavbar } from "../components/EmployeeNavbar";
 import { api } from "../config/axios";
+import { Notification } from "../components/Notification";
 
 export const EditProfile = () => {
   const { user } = useContext(UserContext);
@@ -20,6 +21,12 @@ export const EditProfile = () => {
   const [saving, setSaving] = useState(false);
   const [profileExists, setProfileExists] = useState(false);
   const [error, setError] = useState("");
+  const [notification, setNotification] = useState(null);
+
+  const showNotification = (message, type = "success") => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   // Get employer profile from database
   useEffect(() => {
@@ -120,13 +127,13 @@ export const EditProfile = () => {
 
       console.log("Employer profile response:", response.data);
 
-      alert(
+      showNotification(
         profileExists
           ? "Profile Updated Successfully!"
           : "Profile Created Successfully!"
       );
 
-      navigate("/Dashboard");
+      setTimeout(() => navigate("/Dashboard"), 1500);
     } catch (error) {
       console.log(
         "Employer profile error:",
@@ -153,6 +160,11 @@ export const EditProfile = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <EmployeeNavbar />
+
+      <Notification
+        notification={notification}
+        onClose={() => setNotification(null)}
+      />
 
       <div className="flex-1 bg-gray-100 p-8">
         <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow p-8">
