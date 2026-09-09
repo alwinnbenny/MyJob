@@ -15,5 +15,5 @@ router.route("/complete-profile").post(verifyJWT, candidateProfile);
 router.route("/profile").get(verifyJWT, getCandidateProfile);
 router.route("/update-profile").put(verifyJWT, updateCandidateProfile);
 router.route("/applications/applyjob/:jobId").post(verifyJWT, applyJob);
-router.route("/joblist").get(verifyJWT, getJobs);
+router.route("/joblist").get(getJobs);
 router.route("/getsinglejob/:id").get(verifyJWT, getSingleJob);
