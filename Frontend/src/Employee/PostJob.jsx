@@ -61,6 +61,10 @@ export const PostJob = () => {
     }));
   };
 
+  const handleRichTextChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
  const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -312,7 +316,7 @@ export const PostJob = () => {
                         name="description"
                         placeholder="Describe the role..."
                         value={formData.description}
-                        onChange={handleChange}
+                        onChange={(val) => handleRichTextChange("description", val)}
                         className="w-full border border-gray-200 rounded-xl p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                       />
                     </div>
