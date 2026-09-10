@@ -135,9 +135,11 @@ export const Dashboard = () => {
                           <h3 className="text-xl font-semibold text-[#18191C] hover:text-[#0A65CC] transition">
                             {job.title}
                           </h3>
-                          <span className="bg-[#E7F0FA] text-[#0A65CC] text-sm px-3 py-1 rounded-full flex items-center gap-1">
-                            {job.employmentType}
-                          </span>
+                          {job.employmentType && (
+                            <span className="bg-[#E7F0FA] text-[#0A65CC] text-sm px-3 py-1 rounded-full flex items-center gap-1">
+                              {job.employmentType}
+                            </span>
+                          )}
                         </div>
                         <div className="flex items-center gap-4 text-[#767F8C] text-sm">
                           <span className="flex items-center gap-1">
