@@ -250,7 +250,7 @@ useEffect(()=>{
 
       showNotification("Profile Updated Successfully!");
 
-      setTimeout(() => navigate("/candidate/view-profile"), 1500);
+      setTimeout(() => navigate(-2), 1500);
     } catch (error) {
       console.log("Update profile error:", error.response?.data);
 

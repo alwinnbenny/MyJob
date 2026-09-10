@@ -28,10 +28,11 @@ export const Employers = ()=>{
         <>
         <div>
              <Navbar/>
-      {/* Header Section */}
+      
       <section className="bg-muted-foreground py-4 w-full min-h-28">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between">
+        
             <h2 className="text-black text-lg font-semibold">Employers</h2>
             <div className="flex items-center gap-1 text-sm text-gray-500">
               <NavLink to="/" className="hover:text-blue-600">Home</NavLink>
@@ -41,9 +42,9 @@ export const Employers = ()=>{
           </div>
           <br />
 
-          {/* Search Bar — design only */}
+          
           <div className="bg-white shadow-lg w-full max-w-7xl p-3 py-4 flex items-center">
-            {/* Company / Keyword */}
+           
             <div className="flex items-center flex-1 gap-3 px-4">
               <Search size={22} className="text-blue-600" />
               <input
@@ -55,7 +56,7 @@ export const Employers = ()=>{
 
             <div className="h-10 border-l" />
 
-            {/* Location */}
+           
             <div className="flex items-center flex-1 gap-3 px-4">
               <MapPin size={22} className="text-blue-600" />
               <input
@@ -65,7 +66,7 @@ export const Employers = ()=>{
               />
             </div>
 
-            {/* Industry */}
+            
             <div className="relative flex items-center flex-1 gap-3 px-4">
               <Layers size={22} className="text-blue-600" />
               <select
@@ -94,19 +95,19 @@ export const Employers = ()=>{
         <div className="max-w-7xl mx-auto px-6">
           <FilterBar />
 
-          {/* Result count */}
+         
           {employers.length > 0 && (
             <p className="text-sm text-gray-500 mb-6">
               Showing <span className="font-semibold text-gray-800">{employers.length}</span> employer{employers.length !== 1 ? "s" : ""}
             </p>
           )}
 
-          {/* Error */}
+          
           {error && (
             <p className="text-center text-red-500 py-10">{error}</p>
           )}
 
-          {/* No results */}
+         
           {!error && employers.length === 0 && (
             <div className="text-center py-16">
               <p className="text-gray-500">No employers found.</p>
@@ -119,16 +120,16 @@ export const Employers = ()=>{
                 key={employer._id}
                 className="flex flex-col sm:flex-row sm:items-center sm:justify-between border border-secondary rounded-xl px-7 py-6 hover:border-[#0A65CC] hover:shadow-lg transition-all duration-300 gap-4"
               >
-                {/* Left Side */}
+               
                 <div className="flex items-center gap-5">
-                  {/* Avatar */}
+                  
                   <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center bg-[#E7F0FA]">
                     <span className="text-2xl font-bold text-blue-600">
                       {employer.company?.charAt(0)?.toUpperCase() || "?"}
                     </span>
                   </div>
 
-                  {/* Details */}
+                 
                   <div>
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="text-xl font-semibold text-[#18191C] hover:text-[#0A65CC] transition cursor-pointer">
@@ -162,7 +163,7 @@ export const Employers = ()=>{
                   </div>
                 </div>
 
-                {/* Right Side */}
+               
                 <div className="flex items-center gap-3 self-start sm:self-center">
                   <button className="flex items-center gap-2 bg-[#E7F0FA] text-[#0A65CC] px-6 py-3 hover:bg-[#0A65CC] hover:text-white transition-all cursor-pointer">
                     View Jobs
