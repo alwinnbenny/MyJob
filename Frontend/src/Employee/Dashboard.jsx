@@ -175,9 +175,10 @@ export const Dashboard = () => {
 
                     {/* Description */}
                     <div className="mt-6">
-                      <p className="text-gray-600 line-clamp-2">
-                        {job.description}
-                      </p>
+                      <div
+                        className="text-gray-600 text-sm line-clamp-2 prose max-w-none"
+                        dangerouslySetInnerHTML={{ __html: job.description }}
+                      />
                     </div>
 
                     <div className="flex justify-end mt-6">

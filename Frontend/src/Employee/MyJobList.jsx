@@ -144,9 +144,10 @@ export const MyJobList = () => {
 
                       {/* Description */}
                       {job.description && (
-                        <p className="text-gray-500 text-sm mt-3 line-clamp-2">
-                          {job.description}
-                        </p>
+                        <div
+                          className="text-gray-500 text-sm mt-3 line-clamp-2 prose max-w-none"
+                          dangerouslySetInnerHTML={{ __html: job.description }}
+                        />
                       )}
                     </div>
 

@@ -164,9 +164,10 @@ export const MyJob = () => {
                     Job Description
                   </h2>
 
-                  <p className="text-gray-600 whitespace-pre-line">
-                    {job.description || "No description provided."}
-                  </p>
+                  <div
+                    className="text-gray-600 prose max-w-none"
+                    dangerouslySetInnerHTML={{ __html: job.description || "<p>No description provided.</p>" }}
+                  />
                 </div>
 
                 {job.responsibilities && (

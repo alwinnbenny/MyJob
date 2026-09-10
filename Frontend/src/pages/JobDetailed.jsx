@@ -829,9 +829,10 @@ const handleApplyJob = async () => {
                   Job Description
                 </h2>
 
-                <p className="text-[#5E6670] text-sm leading-relaxed whitespace-pre-line">
-                  {job.description || "No job description provided."}
-                </p>
+                <div
+                  className="text-[#5E6670] text-sm leading-relaxed prose max-w-none"
+                  dangerouslySetInnerHTML={{ __html: job.description || "<p>No job description provided.</p>" }}
+                />
               </div>
 
               {/* Responsibilities */}
