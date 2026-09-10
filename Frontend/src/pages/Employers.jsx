@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { MapPin, ArrowRight, Briefcase, Users, Search, Layers, ChevronDown } from "lucide-react";
 import axios from "axios";
+import { FilterBar } from "../components/Filterbar";
 
 export const Employers = ()=>{
 
@@ -91,6 +92,7 @@ export const Employers = ()=>{
 
       <section className="bg-white py-8 w-full min-h-screen">
         <div className="max-w-7xl mx-auto px-6">
+          <FilterBar />
 
           {/* Result count */}
           {employers.length > 0 && (
