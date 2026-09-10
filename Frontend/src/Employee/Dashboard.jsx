@@ -136,7 +136,7 @@ export const Dashboard = () => {
                             {job.title}
                           </h3>
                           <span className="bg-[#E7F0FA] text-[#0A65CC] text-sm px-3 py-1 rounded-full flex items-center gap-1">
-                            {job.type}
+                            {job.employmentType}
                           </span>
                         </div>
                         <div className="flex items-center gap-4 text-[#767F8C] text-sm">
