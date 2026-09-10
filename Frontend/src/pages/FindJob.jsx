@@ -1,10 +1,30 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Search, MapPin, Layers, ChevronDown } from "lucide-react";
 import { FilterBar } from "../components/Filterbar";
 import { Jobreuse } from "../components/Jobreuse";
+import { Pagination } from "../components/Pagination";
+import { AdvancedFilter } from "../components/AdvancedFilter";
 
 export const Findjob = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
+  const totalPages = 5;
+
+  // Filter state
+  const [searchInput, setSearchInput] = useState("");
+  const [locationInput, setLocationInput] = useState("");
+  const [categoryInput, setCategoryInput] = useState("");
+
+  // Applied filters (triggered on Find Job click)
+  const [filters, setFilters] = useState({ search: "", location: "", category: "" });
+
+  const handleSearch = () => {
+    setFilters({ search: searchInput.trim(), location: locationInput.trim(), category: categoryInput });
+    setCurrentPage(1);
+  };
+
   return (
     <div>
       <Navbar />
@@ -24,7 +44,7 @@ export const Findjob = () => {
           </div>
           <br />
 
-          {/* Search Box */}
+          
 
           <div className="bg-white shadow-lg w-full max-w-7xl border-amber-50  p-3 py-4 flex items-center">
             {/* Job Title */}
@@ -34,6 +54,9 @@ export const Findjob = () => {
                 type="text"
                 placeholder="Job title, Keyword..."
                 className="w-full outline-none placeholder:text-gray-400"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               />
             </div>
 
@@ -46,6 +69,9 @@ export const Findjob = () => {
                 type="text"
                 placeholder="Your Location"
                 className="w-full outline-none placeholder:text-gray-400"
+                value={locationInput}
+                onChange={(e) => setLocationInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               />
             </div>
             {/* Select Category */}
@@ -55,17 +81,16 @@ export const Findjob = () => {
 
               <select
                 className="w-full appearance-none outline-none bg-transparent text-gray-400 cursor-pointer pr-8"
-                defaultValue=""
+                value={categoryInput}
+                onChange={(e) => setCategoryInput(e.target.value)}
               >
-                <option value="" disabled>
-                  Select Category
-                </option>
-                <option>IT & Software</option>
-                <option>Design</option>
-                <option>Marketing</option>
-                <option>Finance</option>
-                <option>Sales</option>
-                <option>Human Resources</option>
+                <option value="">Select Category</option>
+                <option value="IT & Software">IT & Software</option>
+                <option value="Design">Design</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Finance">Finance</option>
+                <option value="Sales">Sales</option>
+                <option value="Human Resources">Human Resources</option>
               </select>
 
               <ChevronDown
@@ -73,32 +98,21 @@ export const Findjob = () => {
                 className="absolute right-4 text-gray-500 pointer-events-none"
               />
             </div>
+
             {/* Advanced Filter */}
-            <div className="relative flex items-center flex-1 gap-3 px-4">
-              {/* <Layers size={22} className="text-blue-600" /> */}
+            <button
+              onClick={() => setShowAdvancedFilter(true)}
+              className="flex items-center justify-between flex-1 gap-3 px-4
+                         text-gray-500 hover:text-blue-600 transition cursor-pointer"
+            >
+              <span>Advanced Filter</span>
+              <ChevronDown size={18} />
+            </button>
 
-              <select
-                className="w-full appearance-none outline-none bg-transparent text-gray-400 cursor-pointer pr-8"
-                defaultValue=""
-              >
-                <option value="" disabled>
-                  Advanced Filter
-                </option>
-                <option></option>
-                <option></option>
-                <option></option>
-                <option></option>
-                <option></option>
-                <option></option>
-              </select>
-
-              <ChevronDown
-                size={18}
-                className="absolute right-4 text-gray-500 pointer-events-none"
-              />
-            </div>
-
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-semibold transition whitespace-nowrap cursor-pointer">
+            <button
+              onClick={handleSearch}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-semibold transition whitespace-nowrap cursor-pointer"
+            >
               Find Job
             </button>
           </div>
@@ -108,9 +122,19 @@ export const Findjob = () => {
       <section className="bg-white py-8 w-full">
         <div className="max-w-7xl mx-auto px-6">
           <FilterBar />
-          <Jobreuse />
+          <Jobreuse filters={filters} />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
       </section>
+
+   
+      {showAdvancedFilter && (
+        <AdvancedFilter onClose={() => setShowAdvancedFilter(false)} />
+      )}
     </div>
   );
 };

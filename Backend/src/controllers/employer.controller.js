@@ -112,3 +112,24 @@ export const getApplicants = async (req, res) => {
     });
   }
 };
+
+
+
+//get company
+
+export const getEmployers = async (req, res) => {
+  try {
+    const employers = await EmployerProfile.find()
+      .populate("user", "fullname email");
+
+    res.status(200).json({
+      employers,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch employers",
+      error: error.message,
+    });
+  }
+};

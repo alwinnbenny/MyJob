@@ -14,38 +14,36 @@ export const Navbar = () => {
   { name: "Home", path: "/" },
   { name: "Find Job", path: "/Findjob" },
   { name: "Employers", path: "/Employers" },
-  { name: "Candidates", path: "/Candidates" },
-  { name: "Pricing Plans", path: "/Pricing" },
-  { name: "Customer Supports", path: "/Support" },
+ 
 ];
 const navigate = useNavigate();
 const {user} = useContext(UserContext)
   return (
     <header className="w-full bg-white border-b border-gray-200 shadow-sm">
       {/* Top Navigation Bar */}
-      <nav className="bg-gray-100 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-11">
+      <nav className="bg-gray-100 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-6 flex items-center h-11 relative">
 
-          {/* Left Menu Links */}
-         <ul className="flex items-center gap-6 text-[13.5px]">
-  {navLinks.map((link) => (
-    <li key={link.path}>
-      <NavLink
-        to={link.path}
-        className={({ isActive }) =>
-          `relative h-11 flex items-center font-medium transition-colors
-          ${
-            isActive
-              ? "text-blue-600 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-blue-600"
-              : "text-gray-500 hover:text-blue-600"
-          }`
-        }
-      >
-        {link.name}
-      </NavLink>
-    </li>
-  ))}
-</ul>
+          {/* Centered Menu Links */}
+          <ul className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1 text-[15px]">
+            {navLinks.map((link) => (
+              <li key={link.path}>
+                <NavLink
+                  to={link.path}
+                  className={({ isActive }) =>
+                    `relative px-4 h-11 flex items-center font-bold tracking-wide transition-all duration-200
+                    ${
+                      isActive
+                        ? "text-blue-600 after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:rounded-full after:bg-blue-600"
+                        : "text-gray-500 hover:text-blue-600 hover:after:absolute hover:after:bottom-0 hover:after:left-3 hover:after:right-3 hover:after:h-0.5 hover:after:rounded-full hover:after:bg-blue-300 hover:after:opacity-60"
+                    }`
+                  }
+                >
+                  {link.name}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
 
           {/* Right Side  */}
           <div className="flex items-center gap-5 text-[13.5px] text-gray-500">

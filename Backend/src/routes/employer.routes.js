@@ -10,7 +10,7 @@ import {
   postJob,
   updateJob,
 } from "../controllers/Job.controller.js";
-import { getApplicants } from "../controllers/employer.controller.js";
+import { getApplicants, getEmployers } from "../controllers/employer.controller.js";
 import {
   employerProfile,
   getEmployerProfile,
@@ -33,3 +33,4 @@ router.route("/complete-profile").post(verifyJWT, isEmployee, employerProfile);
 router.route("/profile").get(verifyJWT, isEmployee, getEmployerProfile);
 router.route("/update-profile").put(verifyJWT, isEmployee, updateEmployerProfile);
 router.route("/employerstats").get(verifyJWT, isEmployee, getEmployerStats);
+router.route("/companylist").get (getEmployers);
