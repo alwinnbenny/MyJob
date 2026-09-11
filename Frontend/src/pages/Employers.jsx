@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { MapPin, ArrowRight, Briefcase, Users, Search, Layers, ChevronDown } from "lucide-react";
-import axios from "axios";
 import { FilterBar } from "../components/Filterbar";
+import { api } from "../config/axios";
 
 export const Employers = ()=>{
 
@@ -16,8 +16,8 @@ export const Employers = ()=>{
 
   const getEmployers = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/api/job-portal/employer/companylist"
+      const response = await api.get(
+        "/api/job-portal/employer/companylist"
       );
       setEmployers(response.data.employers);
     } catch (error) {
