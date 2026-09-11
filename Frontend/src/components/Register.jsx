@@ -1,6 +1,13 @@
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+ 
 
 export const Register = () => {
+
+ const navigate = useNavigate();
+
+
   return (
     <section className="bg-white py-16 w-full min-h-122.5">
       <div className="max-w-7xl mx-auto px-6">
@@ -17,7 +24,8 @@ export const Register = () => {
               cursus a dolor convallis efficitur.
             </p>
 
-            <button className="flex items-center gap-3 bg-white text-[#0A65CC] font-medium px-6 py-3 rounded-lg hover:bg-[#0A65CC] hover:text-white transition-all duration-300 cursor-pointer">
+            <button className="flex items-center gap-3 bg-white text-[#0A65CC] font-medium px-6 py-3 rounded-lg hover:bg-[#0A65CC] hover:text-white transition-all duration-300 cursor-pointer"
+            onClick={() => navigate("/create-account")}>
               Register Now
               <ArrowRight size={20} />
             </button>
@@ -35,7 +43,8 @@ export const Register = () => {
               sed efficitur dolor. Pelque augue risus.
             </p>
 
-            <button className="flex items-center gap-3 bg-white font-medium px-6 py-3 rounded-lg text-blue-600 hover:bg-blue-200 transition-colors duration-300 cursor-pointer">
+            <button className="flex items-center gap-3 bg-white font-medium px-6 py-3 rounded-lg text-blue-600 hover:bg-blue-200 transition-colors duration-300 cursor-pointer"
+            onClick={() => navigate("/create-account")}>
               Register Now
               <ArrowRight size={20} />
             </button>

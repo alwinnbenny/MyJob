@@ -91,7 +91,7 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Support */}
+         
 
           <div>
             <h3 className="text-white text-2xl font-medium mb-8">Support</h3>
