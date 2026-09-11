@@ -4,6 +4,7 @@ import { EmployeeNavbar } from "../components/EmployeeNavbar";
 import { EmployeeSidebar } from "../components/EmployeeSidebar";
 import { api } from "../config/axios";
 import { Notification } from "../components/Notification";
+import { RichTextEditor } from "../components/RichTextEditor";
 
 export const EditJob = () => {
   const { id } = useParams();
@@ -89,7 +90,10 @@ export const EditJob = () => {
     }
   }, [id]);
 
- 
+  const handleRichTextChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -442,31 +446,18 @@ export const EditJob = () => {
                   Job Description
                 </h2>
 
-                <textarea
+                <label className="block text-sm text-gray-500 mb-1">
+                  Description
+                </label>
+
+                <RichTextEditor
                   name="description"
+                  placeholder="Describe the role..."
                   value={formData.description}
-                  onChange={handleChange}
-                  rows="8"
-                  placeholder="Enter job description"
-                  className="w-full border rounded-lg px-4 py-3 outline-none focus:border-blue-600 resize-none"
+                  onChange={(val) => handleRichTextChange("description", val)}
+                  className="w-full border border-gray-200 rounded-xl p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                 />
               </div>
-
-             
-              {/* <div className="bg-white rounded-2xl shadow-sm p-8 mb-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-6">
-                  Responsibilities
-                </h2>
-
-                <textarea
-                  name="responsibilities"
-                  value={formData.responsibilities}
-                  onChange={handleChange}
-                  rows="8"
-                  placeholder="Enter job responsibilities"
-                  className="w-full border rounded-lg px-4 py-3 outline-none focus:border-blue-600 resize-none"
-                />
-              </div> */}
 
               {/* Buttons */}
               <div className="flex justify-end gap-4 pb-8">
