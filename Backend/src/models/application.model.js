@@ -24,4 +24,14 @@ const applicationSchema = new mongoose.Schema(
   },
 );
 
+//to ensure no duplicates
+
+applicationSchema.index(
+  { job: 1, candidate: 1 },
+  { unique: true }
+);
+
+
+
+
 export const Application = mongoose.model("Application", applicationSchema);
