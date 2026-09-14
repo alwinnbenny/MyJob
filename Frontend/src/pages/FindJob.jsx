@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink,  useSearchParams } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
-import { Search, MapPin, Layers, ChevronDown } from "lucide-react";
+import { Search, MapPin, Layers, ChevronDown, X } from "lucide-react";
 import { FilterBar } from "../components/Filterbar";
 import { Jobreuse } from "../components/Jobreuse";
 import { Pagination } from "../components/Pagination";
@@ -23,6 +23,14 @@ export const Findjob = () => {
 
   const handleSearch = () => {
     setFilters({ search: searchInput.trim(), location: locationInput.trim(), category: categoryInput });
+    setCurrentPage(1);
+  };
+
+  const handleClear = () => {
+    setSearchInput("");
+    setLocationInput("");
+    setCategoryInput("");
+    setFilters({ search: "", location: "", category: "" });
     setCurrentPage(1);
   };
 
@@ -135,6 +143,17 @@ export const Findjob = () => {
             >
               Find Job
             </button>
+
+            {(searchInput || locationInput || categoryInput) && (
+              <button
+                onClick={handleClear}
+                title="Clear search"
+                className="flex items-center gap-1.5 bg-gray-100 hover:bg-red-50 hover:text-red-500 text-gray-500 px-5 py-4 font-semibold transition whitespace-nowrap cursor-pointer border-l border-gray-200"
+              >
+                <X size={16} />
+                Clear
+              </button>
+            )}
           </div>
         </div>
       </section>
