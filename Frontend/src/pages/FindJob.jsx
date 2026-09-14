@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink,  useSearchParams } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Search, MapPin, Layers, ChevronDown } from "lucide-react";
 import { FilterBar } from "../components/Filterbar";
@@ -8,6 +8,7 @@ import { Pagination } from "../components/Pagination";
 import { AdvancedFilter } from "../components/AdvancedFilter";
 
 export const Findjob = () => {
+  const [searchparams] = useSearchParams()
   const [currentPage, setCurrentPage] = useState(1);
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
   const totalPages = 5;
@@ -24,6 +25,25 @@ export const Findjob = () => {
     setFilters({ search: searchInput.trim(), location: locationInput.trim(), category: categoryInput });
     setCurrentPage(1);
   };
+
+  useEffect(()=>{
+    const keyword = searchparams.get("keyword") || "";
+    const location = searchparams.get("location") || "";
+
+    setSearchInput(keyword)
+    setLocationInput(location)
+
+    setFilters({
+      search :keyword,
+      location :location,
+      category :""
+    });
+
+
+    setCurrentPage(1);
+
+
+  },[searchparams])
 
   return (
     <div>

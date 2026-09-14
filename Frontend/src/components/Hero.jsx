@@ -1,6 +1,11 @@
 import { Search, MapPin, Briefcase, Building2, Users } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Hero = () => {
+  const navigate = useNavigate();
+  const [Keyword,setKeyword] = useState("")
+  const [location,setLocation] = useState("")
   return (
     <section className="bg-muted-foreground py-16 w-full min-h-198.5">
       <div className="max-w-7xl mx-auto px-6">
@@ -31,8 +36,10 @@ export const Hero = () => {
 
                 <input
                   type="text"
+                  value = {Keyword}
+                  onChange={(e)=>setKeyword(e.target.value)}
                   placeholder="Job title, Keyword..."
-                  className="w-full outline-none text-gray-700 placeholder:text-gray-400"
+                  className="w-full outline-none placeholder:text-gray-400"
                 />
               </div>
 
@@ -43,14 +50,20 @@ export const Hero = () => {
               <div className="flex items-center flex-1 gap-3 px-4">
                 <MapPin size={22} className="text-blue-600" />
 
-                <input
+                <input 
                   type="text"
+                  value={location}
+                  onChange={(e)=>setLocation(e.target.value)}
                   placeholder="Your Location"
-                  className="w-full outline-none text-gray-700 placeholder:text-gray-400"
+                  className="w-full outline-none placeholder:text-gray-400"
                 />
               </div>
 
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-semibold transition whitespace-nowrap cursor-pointer">
+              <button 
+              onClick={()=>{
+                navigate(`/Findjob?keyword=${encodeURIComponent(Keyword)}&location=${encodeURIComponent(location)}`)
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-semibold transition whitespace-nowrap cursor-pointer">
                 Find Job
               </button>
             </div>
@@ -61,9 +74,7 @@ export const Hero = () => {
               Suggestion:
               <span className="ml-2 text-gray-700">Designer,</span>
               <span className="ml-2 text-gray-700">Programing,</span>
-              <span className="ml-2 text-blue-600 font-medium">
-                Digital Marketing,
-              </span>
+              <span className="ml-2 text-gray-700">Digital Marketing,</span>
               <span className="ml-2 text-gray-700">Video,</span>
               <span className="ml-2 text-gray-700">Animation.</span>
             </p>

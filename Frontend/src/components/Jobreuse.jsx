@@ -6,14 +6,14 @@ import {
   MapPin,
   X,
 } from "lucide-react";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../Context/UserContext";
 import { api } from "../config/axios";
 
 export const Jobreuse = ({ filters = {} }) => {
   const navigate = useNavigate();
-   const [jobLists, setJobLists] = useState([]);
+  const [jobLists, setJobLists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showPopup, setShowPopup] = useState(false);
@@ -25,10 +25,20 @@ export const Jobreuse = ({ filters = {} }) => {
       try {
         setLoading(true);
         setError("");
-        const response = await api.get("/api/job-portal/candidate/joblist");
+        const response = await api.get(
+          `/api/job-portal/candidate/joblist?keyword=${encodeURIComponent(filters.search || "")}&location=${encodeURIComponent(filters.location || "")}&category=${encodeURIComponent(filters.category || "")}`
+        );
 
         console.log("joblistings:", response.data);
+        // const response = await api.get("/api/job-portal/candidate/joblist", {
+        //   params: {
+        //     keyword: filters.search || "",
+        //     location: filters.location || "",
+        //     category: filters.category || "",
+        //   },
+        // });
 
+        // console.log("RESPONSE:", response.data);
         setJobLists(
           Array.isArray(response.data)
             ? response.data
@@ -46,7 +56,7 @@ export const Jobreuse = ({ filters = {} }) => {
     };
 
     fetchJobLists();
-  }, []);
+  }, [filters.search, filters.location, filters.category]);
 
   //get remaining days
 
@@ -97,26 +107,7 @@ export const Jobreuse = ({ filters = {} }) => {
     );
   };
 
-  const filteredJobs = useMemo(() => {
-    const { search = "", location = "", category = "" } = filters;
-    return jobLists.filter((job) => {
-      const matchesSearch =
-        !search ||
-        job.title?.toLowerCase().includes(search.toLowerCase()) ||
-        job.company?.toLowerCase().includes(search.toLowerCase());
-
-      const matchesLocation =
-        !location ||
-        job.location?.toLowerCase().includes(location.toLowerCase());
-
-      const matchesCategory =
-        !category ||
-        job.employmentType?.toLowerCase().includes(category.toLowerCase()) ||
-        job.category?.toLowerCase().includes(category.toLowerCase());
-
-      return matchesSearch && matchesLocation && matchesCategory;
-    });
-  }, [jobLists, filters]);
+  const filteredJobs = jobLists;
 
   if (loading) {
     return (
@@ -160,7 +151,9 @@ export const Jobreuse = ({ filters = {} }) => {
         {filteredJobs.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-gray-500 mb-2">
-              {jobLists.length === 0 ? "No jobs available." : "No jobs match your search."}
+              {jobLists.length === 0
+                ? "No jobs available."
+                : "No jobs match your search."}
             </p>
           </div>
         ) : (

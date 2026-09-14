@@ -72,10 +72,55 @@ export const postJob = async (req, res) => {
   }
 };
 
+// export const getJobs = async (req, res) => {
+//   try {
+//     const posts = await Job.find();
+//     res.status(200).json(posts);
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Internal Server Error",
+//       error,
+//     });
+//   }
+// };
+
 export const getJobs = async (req, res) => {
   try {
-    const posts = await Job.find();
-    res.status(200).json(posts);
+    const {keyword,location,category} = req.query;
+
+    
+
+    const filter = {};
+
+    if(keyword){
+      filter.$or = [
+        {title : {$regex : keyword, $options: "i"}},
+        {company : {$regex : keyword, $options: "i"}},
+        
+      ];
+    }
+
+    if(location){
+      filter.location = {
+        $regex : location,
+        $options : "i",
+      }
+    }
+
+
+    if(category){
+      filter.category = {
+        $regex : category,
+        $options : "i",
+      }
+    }
+ 
+    const posts = await Job.find(filter);
+
+    res.status(200).json({
+      jobLists: posts
+    })
+    
   } catch (error) {
     res.status(500).json({
       message: "Internal Server Error",
@@ -83,6 +128,13 @@ export const getJobs = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
+
 
 // get job by person id-means posted person could see the jobs
 
