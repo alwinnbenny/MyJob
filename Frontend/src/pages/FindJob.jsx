@@ -128,14 +128,14 @@ export const Findjob = () => {
             </div>
 
             {/* Advanced Filter */}
-            <button
+            {/* <button
               onClick={() => setShowAdvancedFilter(true)}
               className="flex items-center justify-between flex-1 gap-3 px-4
                          text-gray-500 hover:text-blue-600 transition cursor-pointer"
             >
               <span>Advanced Filter</span>
               <ChevronDown size={18} />
-            </button>
+            </button> */}
 
             <button
               onClick={handleSearch}
