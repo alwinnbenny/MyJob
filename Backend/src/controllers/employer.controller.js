@@ -113,20 +113,70 @@ export const getApplicants = async (req, res) => {
   }
 };
 
-
-
 //get company
+
+// export const getEmployers = async (req, res) => {
+//   try {
+//     const employers = await EmployerProfile.find()
+//       .populate("user", "fullname email");
+
+//     res.status(200).json({
+//       employers,
+//     });
+
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Failed to fetch employers",
+//       error: error.message,
+//     });
+//   }
+// };
 
 export const getEmployers = async (req, res) => {
   try {
-    const employers = await EmployerProfile.find()
-      .populate("user", "fullname email");
+    const { keyword } = req.query;
+
+    console.log("Employer filters:", {
+      keyword
+      
+    });
+
+    const filter = {};
+
+    if (keyword) {
+      filter.company = {
+            $regex: keyword,
+            $options: "i",
+          };
+        
+      
+    }
+
+    // if (location) {
+    //   filter.location = {
+    //     $regex: location,
+    //     $options: "i",
+    //   };
+    // }
+
+    // if (industry) {
+    //   filter.industry = {
+    //     $regex: industry,
+    //     $options: "i",
+    //   };
+    // }
+
+    const employers = await EmployerProfile.find(filter).populate(
+      "user",
+      "fullname email",
+    );
 
     res.status(200).json({
       employers,
     });
-
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
       message: "Failed to fetch employers",
       error: error.message,

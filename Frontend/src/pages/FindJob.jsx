@@ -18,7 +18,7 @@ export const Findjob = () => {
   const [locationInput, setLocationInput] = useState("");
   const [categoryInput, setCategoryInput] = useState("");
 
-  // Applied filters (triggered on Find Job click)
+ 
   const [filters, setFilters] = useState({ search: "", location: "", category: "" });
 
   const handleSearch = () => {
@@ -75,7 +75,7 @@ export const Findjob = () => {
           
 
           <div className="bg-white shadow-lg w-full max-w-7xl border-amber-50  p-3 py-4 flex items-center">
-            {/* Job Title */}
+           
             <div className="flex items-center flex-1 gap-3 px-4">
               <Search size={22} className="text-blue-600" />
               <input

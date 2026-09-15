@@ -1,60 +1,75 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
-import { MapPin, ArrowRight, Briefcase, Users, Search, Layers, ChevronDown } from "lucide-react";
+import {
+  MapPin,
+  ArrowRight,
+  Briefcase,
+  Users,
+  Search,
+  Layers,
+  ChevronDown,
+} from "lucide-react";
 import { FilterBar } from "../components/Filterbar";
 import { api } from "../config/axios";
 
-export const Employers = ()=>{
-
+export const Employers = () => {
   const [employers, setEmployers] = useState([]);
+  const [keyword, setKeyword] = useState("");
   const [error, setError] = useState("");
-
+  const navigate = useNavigate();
   useEffect(() => {
     getEmployers();
   }, []);
 
   const getEmployers = async () => {
     try {
-      const response = await api.get(
-        "/api/job-portal/employer/companylist"
-      );
-      setEmployers(response.data.employers);
+      const response = await api.get("/api/job-portal/employer/companylist", {
+        params: {
+          keyword,
+          
+        },
+      });
+
+      console.log("Employers:", response.data);
+
+      setEmployers(response.data.employers || []);
     } catch (error) {
-      setError(error.message);
+      setError(error.response?.data?.message || error.message);
     }
   };
-    return(
-        <>
-        <div>
-             <Navbar/>
-      
-      <section className="bg-muted-foreground py-4 w-full min-h-28">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between">
-        
-            <h2 className="text-black text-lg font-semibold">Employers</h2>
-            <div className="flex items-center gap-1 text-sm text-gray-500">
-              <NavLink to="/" className="hover:text-blue-600">Home</NavLink>
-              <span>/</span>
-              <span className="text-black">Employers</span>
-            </div>
-          </div>
-          <br />
+  return (
+    <>
+      <div>
+        <Navbar />
 
-          
-          <div className="bg-white shadow-lg w-full max-w-7xl p-3 py-4 flex items-center">
-           
-            <div className="flex items-center flex-1 gap-3 px-4">
-              <Search size={22} className="text-blue-600" />
-              <input
-                type="text"
-                placeholder="Company name, keyword..."
-                className="w-full outline-none placeholder:text-gray-400"
-              />
+        <section className="bg-muted-foreground py-4 w-full min-h-28">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-black text-lg font-semibold">Employers</h2>
+              <div className="flex items-center gap-1 text-sm text-gray-500">
+                <NavLink to="/" className="hover:text-blue-600">
+                  Home
+                </NavLink>
+                <span>/</span>
+                <span className="text-black">Employers</span>
+              </div>
             </div>
+            <br />
 
-            <div className="h-10 border-l" />
+            <div className="bg-white shadow-lg w-full max-w-7xl p-3 py-4 flex items-center">
+              <div className="flex items-center flex-1 gap-3 px-4">
+                <Search size={22} className="text-blue-600" />
+                <input
+                  type="text"
+                  value={keyword}
+                  onChange={(e)=>setKeyword(e.target.value)}
+                  placeholder="Company name, keyword..."
+                  className="w-full outline-none placeholder:text-gray-400"
+                />
+              </div>
+
+              {/* <div className="h-10 border-l" />
 
            
             <div className="flex items-center flex-1 gap-3 px-4">
@@ -82,101 +97,98 @@ export const Employers = ()=>{
                 <option>Human Resources</option>
               </select>
               <ChevronDown size={18} className="absolute right-4 text-gray-500 pointer-events-none" />
-            </div>
+            </div> */}
 
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-semibold transition whitespace-nowrap cursor-pointer">
-              Search
-            </button>
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-semibold transition whitespace-nowrap cursor-pointer">
+                Search
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="bg-white py-8 w-full min-h-screen">
-        <div className="max-w-7xl mx-auto px-6">
-          <FilterBar />
+        <section className="bg-white py-8 w-full min-h-screen">
+          <div className="max-w-7xl mx-auto px-6">
+            <FilterBar />
 
-         
-          {employers.length > 0 && (
-            <p className="text-sm text-gray-500 mb-6">
-              Showing <span className="font-semibold text-gray-800">{employers.length}</span> employer{employers.length !== 1 ? "s" : ""}
-            </p>
-          )}
+            {employers.length > 0 && (
+              <p className="text-sm text-gray-500 mb-6">
+                Showing{" "}
+                <span className="font-semibold text-gray-800">
+                  {employers.length}
+                </span>{" "}
+                employer{employers.length !== 1 ? "s" : ""}
+              </p>
+            )}
 
-          
-          {error && (
-            <p className="text-center text-red-500 py-10">{error}</p>
-          )}
+            {error && <p className="text-center text-red-500 py-10">{error}</p>}
 
-         
-          {!error && employers.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-gray-500">No employers found.</p>
-            </div>
-          )}
-
-          <div className="space-y-6">
-            {employers.map((employer) => (
-              <div
-                key={employer._id}
-                className="flex flex-col sm:flex-row sm:items-center sm:justify-between border border-secondary rounded-xl px-7 py-6 hover:border-[#0A65CC] hover:shadow-lg transition-all duration-300 gap-4"
-              >
-               
-                <div className="flex items-center gap-5">
-                  
-                  <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center bg-[#E7F0FA]">
-                    <span className="text-2xl font-bold text-blue-600">
-                      {employer.company?.charAt(0)?.toUpperCase() || "?"}
-                    </span>
-                  </div>
-
-                 
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-xl font-semibold text-[#18191C] hover:text-[#0A65CC] transition cursor-pointer">
-                        {employer.company || "Unnamed Company"}
-                      </h3>
-                      {employer.industry && (
-                        <span className="bg-[#E7F0FA] text-[#0A65CC] text-sm px-3 py-1 rounded-full flex items-center gap-1">
-                          <Briefcase size={12} />
-                          {employer.industry}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="flex items-center gap-4 text-[#767F8C] text-sm">
-                      {employer.location && (
-                        <span className="flex items-center gap-1">
-                          <MapPin size={14} />
-                          {employer.location}
-                        </span>
-                      )}
-                      {employer.teamSize && (
-                        <span className="flex items-center gap-1">
-                          <Users size={14} />
-                          {employer.teamSize}
-                        </span>
-                      )}
-                      {employer.user?.fullname && (
-                        <span className="text-gray-400">{employer.user.fullname}</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-               
-                <div className="flex items-center gap-3 self-start sm:self-center">
-                  <button className="flex items-center gap-2 bg-[#E7F0FA] text-[#0A65CC] px-6 py-3 hover:bg-[#0A65CC] hover:text-white transition-all cursor-pointer">
-                    View Jobs
-                    <ArrowRight size={18} />
-                  </button>
-                </div>
+            {!error && employers.length === 0 && (
+              <div className="text-center py-16">
+                <p className="text-gray-500">No employers found.</p>
               </div>
-            ))}
-          </div>
+            )}
 
-        </div>
-      </section>
-        </div>
-        </>
-    )
-}
+            <div className="space-y-6">
+              {employers.map((employer) => (
+                <div
+                  key={employer._id}
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between border border-secondary rounded-xl px-7 py-6 hover:border-[#0A65CC] hover:shadow-lg transition-all duration-300 gap-4"
+                >
+                  <div className="flex items-center gap-5">
+                    <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center bg-[#E7F0FA]">
+                      <span className="text-2xl font-bold text-blue-600">
+                        {employer.company?.charAt(0)?.toUpperCase() || "?"}
+                      </span>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="text-xl font-semibold text-[#18191C] hover:text-[#0A65CC] transition cursor-pointer">
+                          {employer.company || "company name not available"}
+                        </h3>
+                        {employer.industry && (
+                          <span className="bg-[#E7F0FA] text-[#0A65CC] text-sm px-3 py-1 rounded-full flex items-center gap-1">
+                            <Briefcase size={12} />
+                            {employer.industry}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-4 text-[#767F8C] text-sm">
+                        {employer.location && (
+                          <span className="flex items-center gap-1">
+                            <MapPin size={14} />
+                            {employer.location}
+                          </span>
+                        )}
+                        {employer.teamSize && (
+                          <span className="flex items-center gap-1">
+                            <Users size={14} />
+                            {employer.teamSize}
+                          </span>
+                        )}
+                        {employer.user?.fullname && (
+                          <span className="text-gray-400">
+                            {employer.user.fullname}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 self-start sm:self-center">
+                    <button 
+                    
+                    className="flex items-center gap-2 bg-[#E7F0FA] text-[#0A65CC] px-6 py-3 hover:bg-[#0A65CC] hover:text-white transition-all cursor-pointer">
+                      View Jobs
+                      <ArrowRight size={18} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
+  );
+};
