@@ -20,7 +20,7 @@ export const Employers = () => {
   const navigate = useNavigate();
   useEffect(() => {
     getEmployers();
-  }, []);
+  }, [keyword]);
 
   const getEmployers = async () => {
     try {
@@ -99,7 +99,7 @@ export const Employers = () => {
               <ChevronDown size={18} className="absolute right-4 text-gray-500 pointer-events-none" />
             </div> */}
 
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-semibold transition whitespace-nowrap cursor-pointer">
+              <button onClick={getEmployers} className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-semibold transition whitespace-nowrap cursor-pointer">
                 Search
               </button>
             </div>
