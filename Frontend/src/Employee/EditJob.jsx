@@ -205,7 +205,7 @@ export const EditJob = () => {
         <div className="bg-gray-100 min-h-screen py-8 px-6">
           <div className="max-w-5xl mx-auto">
 
-            {/* Header */}
+            
             <div className="bg-white rounded-2xl shadow-sm p-8 mb-6">
               <h1 className="text-3xl font-semibold text-gray-800">
                 Edit Job
@@ -216,7 +216,7 @@ export const EditJob = () => {
               </p>
             </div>
 
-            {/* Error */}
+            
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 rounded-lg px-4 py-3 mb-6">
                 {error}
@@ -225,7 +225,7 @@ export const EditJob = () => {
 
             <form onSubmit={handleUpdate}>
 
-              {/* Basic Information */}
+              
               <div className="bg-white rounded-2xl shadow-sm p-8 mb-6">
                 <h2 className="text-xl font-semibold text-gray-800 mb-6">
                   Basic Information
@@ -233,7 +233,7 @@ export const EditJob = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                  {/* Job Title */}
+                  
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Job Title
@@ -250,7 +250,7 @@ export const EditJob = () => {
                     />
                   </div>
 
-                  {/* Company */}
+                  
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Company
@@ -267,7 +267,7 @@ export const EditJob = () => {
                     />
                   </div>
 
-                  {/* Location */}
+                  
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Location
@@ -284,7 +284,6 @@ export const EditJob = () => {
                     />
                   </div>
 
-                  {/* Salary */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Salary
@@ -300,7 +299,7 @@ export const EditJob = () => {
                     />
                   </div>
 
-                  {/* Employment Type */}
+                
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Employment Type
@@ -331,7 +330,7 @@ export const EditJob = () => {
                     </select>
                   </div>
 
-                  {/* Experience */}
+                 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Experience
@@ -347,7 +346,7 @@ export const EditJob = () => {
                     />
                   </div>
 
-                  {/* Category */}
+                 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Category
@@ -363,7 +362,7 @@ export const EditJob = () => {
                     />
                   </div>
 
-                  {/* Openings */}
+              
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Number of Openings
@@ -379,7 +378,7 @@ export const EditJob = () => {
                     />
                   </div>
 
-                  {/* Deadline */}
+                
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Application Deadline
@@ -394,7 +393,7 @@ export const EditJob = () => {
                     />
                   </div>
 
-                  {/* Status */}
+                  
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Status
@@ -417,7 +416,7 @@ export const EditJob = () => {
                 </div>
               </div>
 
-              {/* Skills */}
+             
               <div className="bg-white rounded-2xl shadow-sm p-8 mb-6">
                 <h2 className="text-xl font-semibold text-gray-800 mb-6">
                   Skills Required
@@ -459,7 +458,7 @@ export const EditJob = () => {
                 />
               </div>
 
-              {/* Buttons */}
+             
               <div className="flex justify-end gap-4 pb-8">
 
                 <button

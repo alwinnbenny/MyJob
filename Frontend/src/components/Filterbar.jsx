@@ -23,7 +23,7 @@ export const FilterBar = () => {
 
         {/* Right Side */}
         <div className="flex items-center gap-4">
-          {/* Sort */}
+         
           <div className="flex items-center justify-between w-44 h-12 px-4 border border-gray-300 rounded-md cursor-pointer">
             <span className="text-gray-600">Latest</span>
             <ChevronDown size={18} className="text-gray-500" />

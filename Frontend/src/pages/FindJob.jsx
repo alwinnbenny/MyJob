@@ -13,13 +13,17 @@ export const Findjob = () => {
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
   const totalPages = 5;
 
-  // Filter state
-  const [searchInput, setSearchInput] = useState("");
-  const [locationInput, setLocationInput] = useState("");
+  // Filter state — initialized from URL params so Jobreuse only fetches once
+  const [searchInput, setSearchInput] = useState(() => searchparams.get("keyword") || "");
+  const [locationInput, setLocationInput] = useState(() => searchparams.get("location") || "");
   const [categoryInput, setCategoryInput] = useState("");
 
- 
-  const [filters, setFilters] = useState({ search: "", location: "", category: "" });
+  const [filters, setFilters] = useState(() => ({
+    search: searchparams.get("keyword") || "",
+    location: searchparams.get("location") || "",
+    category: "",
+    company: searchparams.get("company") || "",
+  }));
 
   const handleSearch = () => {
     setFilters({ search: searchInput.trim(), location: locationInput.trim(), category: categoryInput });
@@ -37,19 +41,19 @@ export const Findjob = () => {
   useEffect(()=>{
     const keyword = searchparams.get("keyword") || "";
     const location = searchparams.get("location") || "";
+    const company = searchparams.get("company") || "";
 
     setSearchInput(keyword)
     setLocationInput(location)
 
     setFilters({
-      search :keyword,
-      location :location,
-      category :""
+      search: keyword,
+      location: location,
+      category: "",
+      company: company,
     });
 
-
     setCurrentPage(1);
-
 
   },[searchparams])
 
@@ -160,7 +164,7 @@ export const Findjob = () => {
 
       <section className="bg-white py-8 w-full">
         <div className="max-w-7xl mx-auto px-6">
-          <FilterBar />
+          {/* <FilterBar /> */}
           <Jobreuse filters={filters} />
           <Pagination
             currentPage={currentPage}

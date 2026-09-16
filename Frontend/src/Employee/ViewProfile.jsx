@@ -8,6 +8,7 @@ export const ViewProfile = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
+  
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -43,6 +44,7 @@ export const ViewProfile = () => {
     );
   }
 
+
   return (
     <div className="flex flex-col min-h-screen">
       <EmployeeNavbar />
@@ -53,9 +55,9 @@ export const ViewProfile = () => {
 
           <div className="flex justify-center mb-4">
             <div className="w-20 h-20 rounded-full flex items-center justify-center font-bold">
-              {user?.profileImage ? (
+              {profile?.profileImage ? (
                 <img
-                  src={user.profileImage}
+                  src={profile.profileImage}
                   alt="avatar"
                   className="w-full h-full object-cover rounded-full"
                 />

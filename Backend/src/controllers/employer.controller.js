@@ -1,6 +1,7 @@
 import { EmployerProfile } from "../models/employerProfile.js";
 import { Application } from "../models/application.model.js";
 import { Job } from "../models/postjob.model.js";
+import cloudinary from "../utils/cloudinary.js";
 
 export const employerProfile = async (req, res) => {
   try {
@@ -21,10 +22,25 @@ export const employerProfile = async (req, res) => {
       });
     }
 
+    // Upload profile image to Cloudinary if provided
+    let profileImageUrl = "";
+    if (req.file) {
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream({ folder: "employer_profiles" }, (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          })
+          .end(req.file.buffer);
+      });
+      profileImageUrl = result.secure_url;
+    }
+
     const profile = await EmployerProfile.create({
       user: req.user._id,
       phone,
       company,
+      profileImage: profileImageUrl,
     });
 
     res.status(201).json(profile);
@@ -77,6 +93,19 @@ export const updateEmployerProfile = async (req, res) => {
 
     profile.phone = phone;
     profile.company = company;
+
+   
+    if (req.file) {
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream({ folder: "employer_profiles" }, (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          })
+          .end(req.file.buffer);
+      });
+      profile.profileImage = result.secure_url;
+    }
 
     await profile.save();
 
@@ -149,9 +178,10 @@ export const getEmployers = async (req, res) => {
             $options: "i",
           };
         
-      
     }
 
+
+    
     // if (location) {
     //   filter.location = {
     //     $regex: location,

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import {
@@ -18,6 +18,7 @@ export const Employers = () => {
   const [keyword, setKeyword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
   useEffect(() => {
     getEmployers();
   }, [keyword]);
@@ -27,17 +28,17 @@ export const Employers = () => {
       const response = await api.get("/api/job-portal/employer/companylist", {
         params: {
           keyword,
-          
         },
       });
 
-      console.log("Employers:", response.data);
+      // console.log("Employers:", response.data);
 
       setEmployers(response.data.employers || []);
     } catch (error) {
       setError(error.response?.data?.message || error.message);
     }
   };
+
   return (
     <>
       <div>
@@ -63,7 +64,7 @@ export const Employers = () => {
                 <input
                   type="text"
                   value={keyword}
-                  onChange={(e)=>setKeyword(e.target.value)}
+                  onChange={(e) => setKeyword(e.target.value)}
                   placeholder="Company name, keyword..."
                   className="w-full outline-none placeholder:text-gray-400"
                 />
@@ -99,7 +100,10 @@ export const Employers = () => {
               <ChevronDown size={18} className="absolute right-4 text-gray-500 pointer-events-none" />
             </div> */}
 
-              <button onClick={getEmployers} className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-semibold transition whitespace-nowrap cursor-pointer">
+              <button
+                onClick={getEmployers}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-semibold transition whitespace-nowrap cursor-pointer"
+              >
                 Search
               </button>
             </div>
@@ -108,7 +112,7 @@ export const Employers = () => {
 
         <section className="bg-white py-8 w-full min-h-screen">
           <div className="max-w-7xl mx-auto px-6">
-            <FilterBar />
+            {/* <FilterBar /> */}
 
             {employers.length > 0 && (
               <p className="text-sm text-gray-500 mb-6">
@@ -136,9 +140,17 @@ export const Employers = () => {
                 >
                   <div className="flex items-center gap-5">
                     <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center bg-[#E7F0FA]">
-                      <span className="text-2xl font-bold text-blue-600">
-                        {employer.company?.charAt(0)?.toUpperCase() || "?"}
-                      </span>
+                      {employer.profileImage ? (
+                        <img
+                          src={employer.profileImage}
+                          alt={employer.company}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-2xl font-bold text-blue-600">
+                          {employer.company?.charAt(0)?.toUpperCase() || "?"}
+                        </span>
+                      )}
                     </div>
 
                     <div>
@@ -176,9 +188,14 @@ export const Employers = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-3 self-start sm:self-center">
-                    <button 
-                    
-                    className="flex items-center gap-2 bg-[#E7F0FA] text-[#0A65CC] px-6 py-3 hover:bg-[#0A65CC] hover:text-white transition-all cursor-pointer">
+                    <button
+                      onClick={() =>
+                        navigate(
+                          `/Findjob?company=${encodeURIComponent(employer.company)}`,
+                        )
+                      }
+                      className="flex items-center gap-2 bg-[#E7F0FA] text-[#0A65CC] px-6 py-3 hover:bg-[#0A65CC] hover:text-white transition-all cursor-pointer"
+                    >
                       View Jobs
                       <ArrowRight size={18} />
                     </button>

@@ -25,20 +25,21 @@ export const Jobreuse = ({ filters = {} }) => {
       try {
         setLoading(true);
         setError("");
-        const response = await api.get(
-          `/api/job-portal/candidate/joblist?keyword=${encodeURIComponent(filters.search || "")}&location=${encodeURIComponent(filters.location || "")}&category=${encodeURIComponent(filters.category || "")}`
-        );
+        // const response = await api.get(
+        //   `/api/job-portal/candidate/joblist?keyword=${encodeURIComponent(filters.search || "")}&location=${encodeURIComponent(filters.location || "")}&category=${encodeURIComponent(filters.category || "")}`
+        // );
 
-        console.log("joblistings:", response.data);
-        // const response = await api.get("/api/job-portal/candidate/joblist", {
-        //   params: {
-        //     keyword: filters.search || "",
-        //     location: filters.location || "",
-        //     category: filters.category || "",
-        //   },
-        // });
+        // console.log("joblistings:", response.data);
+        const response = await api.get("/api/job-portal/candidate/joblist", {
+          params: {
+            keyword: filters.search || "",
+            location: filters.location || "",
+            category: filters.category || "",
+            company: filters.company || "",
+          },
+        });
 
-        // console.log("RESPONSE:", response.data);
+        console.log("RESPONSE:", response.data);
         setJobLists(
           Array.isArray(response.data)
             ? response.data
@@ -56,7 +57,7 @@ export const Jobreuse = ({ filters = {} }) => {
     };
 
     fetchJobLists();
-  }, [filters.search, filters.location, filters.category]);
+  }, [filters.search, filters.location, filters.category, filters.company]);
 
   //get remaining days
 
@@ -137,10 +138,7 @@ export const Jobreuse = ({ filters = {} }) => {
         <div className="flex justify-between items-center mb-16">
           <h2 className="text-5xl font-semibold">Featured Job</h2>
 
-          <button
-            onClick={() => navigate("/jobs")}
-            className="flex items-center gap-3 border px-6 py-3 rounded-lg text-blue-600 hover:bg-blue-600 hover:text-white transition cursor-pointer"
-          >
+          <button className="flex items-center gap-3 border px-6 py-3 rounded-lg text-blue-600 hover:bg-blue-600 hover:text-white transition cursor-pointer">
             View All
             <ArrowRight size={20} />
           </button>

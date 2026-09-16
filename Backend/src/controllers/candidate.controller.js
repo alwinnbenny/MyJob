@@ -1,10 +1,11 @@
 import { CandidateProfile } from "../models/candidateProfile.model.js";
 import { Job } from "../models/postjob.model.js";
 import { Application } from "../models/application.model.js";
+import cloudinary from "../utils/cloudinary.js";
 
 export const candidateProfile = async (req, res) => {
   try {
-    const { phone, experience, skills, profileImage, resume } = req.body;
+    const { phone, experience, skills } = req.body;
 
     if (!phone || !experience || !skills) {
       return res.status(400).json({
@@ -22,13 +23,26 @@ export const candidateProfile = async (req, res) => {
       });
     }
 
+    // Upload profile image to Cloudinary if provided
+    let profileImageUrl = "";
+    if (req.file) {
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream({ folder: "candidate_profiles" }, (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          })
+          .end(req.file.buffer);
+      });
+      profileImageUrl = result.secure_url;
+    }
+
     const profile = await CandidateProfile.create({
       user: req.user._id,
       phone,
       experience,
       skills,
-      profileImage,
-      resume,
+      profileImage: profileImageUrl,
     });
 
     return res.status(201).json(profile);
@@ -66,7 +80,7 @@ export const getCandidateProfile = async (req, res) => {
 
 export const updateCandidateProfile = async (req, res) => {
   try {
-    const { phone, experience, skills, profileImage, resume } = req.body;
+    const { phone, experience, skills } = req.body;
 
     const profile = await CandidateProfile.findOne({
       user: req.user._id,
@@ -82,12 +96,17 @@ export const updateCandidateProfile = async (req, res) => {
     profile.experience = experience;
     profile.skills = skills;
 
-    if (profileImage !== undefined) {
-      profile.profileImage = profileImage;
-    }
-
-    if (resume !== undefined) {
-      profile.resume = resume;
+    // Upload new profile image to Cloudinary if provided
+    if (req.file) {
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream({ folder: "candidate_profiles" }, (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          })
+          .end(req.file.buffer);
+      });
+      profile.profileImage = result.secure_url;
     }
 
     await profile.save();

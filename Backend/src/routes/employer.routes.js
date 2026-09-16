@@ -16,6 +16,7 @@ import {
   getEmployerProfile,
   updateEmployerProfile,
 } from "../controllers/employer.controller.js";
+import { upload } from "../middleware/upload.js";
 
 export const router = Router();
 
@@ -29,8 +30,8 @@ router.route("/getsinglejob/:id").get(verifyJWT, isEmployee, getSingleJob);
 router.route("/getrecentjob").get(verifyJWT, isEmployee, getRecentJobs);
 router.route("/updatejob/:id").put(verifyJWT, isEmployee, updateJob);
 router.route("/deletejob/:id").delete(verifyJWT, isEmployee, deleteJob);
-router.route("/complete-profile").post(verifyJWT, isEmployee, employerProfile);
+router.route("/complete-profile").post(verifyJWT, isEmployee,upload.single("profileImage"), employerProfile);
 router.route("/profile").get(verifyJWT, isEmployee, getEmployerProfile);
-router.route("/update-profile").put(verifyJWT, isEmployee, updateEmployerProfile);
+router.route("/update-profile").put(verifyJWT, isEmployee,upload.single("profileImage"), updateEmployerProfile,);
 router.route("/employerstats").get(verifyJWT, isEmployee, getEmployerStats);
 router.route("/companylist").get (getEmployers);

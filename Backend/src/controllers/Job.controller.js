@@ -86,11 +86,24 @@ export const postJob = async (req, res) => {
 
 export const getJobs = async (req, res) => {
   try {
-    const {keyword,location,category} = req.query;
+    const {keyword,location,category,company} = req.query;
 
     
 
     const filter = {};
+
+    filter.deadline = {
+      $gt: new Date()
+    }
+    console.log(filter);
+
+     if(company){
+      filter.company = {
+        $regex : company,
+        $options : "i",
+      }
+    }
+    
 
     if(keyword){
       filter.$or = [

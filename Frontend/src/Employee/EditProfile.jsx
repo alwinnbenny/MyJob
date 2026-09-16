@@ -17,6 +17,9 @@ export const EditProfile = () => {
     profileImage: "",
   });
 
+  const [profileImage, setProfileImage] = useState(null);
+  const [preview, setPreview] = useState("");
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [profileExists, setProfileExists] = useState(false);
@@ -44,6 +47,7 @@ export const EditProfile = () => {
           ...prev,
           phone: profile.phone || "",
           company: profile.company || "",
+          profileImage: profile.profileImage || "",
         }));
 
         setProfileExists(true);
@@ -53,7 +57,6 @@ export const EditProfile = () => {
           error.response?.data || error.message
         );
 
-        // Profile doesn't exist yet
         if (error.response?.status === 404) {
           setProfileExists(false);
         } else {
@@ -80,12 +83,13 @@ export const EditProfile = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
-    if (file) {
-      setFormData((prev) => ({
-        ...prev,
-        profileImage: URL.createObjectURL(file),
-      }));
-    }
+    if (!file) return;
+
+    setProfileImage(file);
+    setPreview(URL.createObjectURL(file));
+
+   
+    setFormData((prev) => ({ ...prev, profileImage: "" }));
   };
 
   const handleSubmit = async (e) => {
@@ -101,25 +105,27 @@ export const EditProfile = () => {
     try {
       setSaving(true);
 
+      const data = new FormData();
+      data.append("phone", formData.phone);
+      data.append("company", formData.company);
+
+      if (profileImage) {
+        data.append("profileImage", profileImage);
+      }
+
       let response;
 
       if (profileExists) {
-        // Update existing profile
+        
         response = await api.put(
           "/api/job-portal/employer/update-profile",
-          {
-            phone: formData.phone,
-            company: formData.company,
-          }
+          data
         );
       } else {
-        // Create profile for the first time
+        
         response = await api.post(
           "/api/job-portal/employer/complete-profile",
-          {
-            phone: formData.phone,
-            company: formData.company,
-          }
+          data
         );
 
         setProfileExists(true);
@@ -175,14 +181,14 @@ export const EditProfile = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
 
-            {/* Profile Image */}
+            
             <div className="flex flex-col items-center gap-3 mb-2">
 
               <div className="w-20 h-20 rounded-full overflow-hidden bg-blue-400 text-white flex items-center justify-center text-2xl font-bold">
 
-                {formData.profileImage ? (
+                {preview || formData.profileImage ? (
                   <img
-                    src={formData.profileImage}
+                    src={preview || formData.profileImage}
                     alt="avatar"
                     className="w-full h-full object-cover"
                   />
@@ -209,7 +215,7 @@ export const EditProfile = () => {
 
             </div>
 
-            {/* Username */}
+           
             <div>
               <label className="font-medium">
                 Username
@@ -224,7 +230,7 @@ export const EditProfile = () => {
               />
             </div>
 
-            {/* Email */}
+            
             <div>
               <label className="font-medium">
                 Email
@@ -239,7 +245,7 @@ export const EditProfile = () => {
               />
             </div>
 
-            {/* Phone */}
+          
             <div>
               <label className="font-medium">
                 Phone
@@ -255,7 +261,7 @@ export const EditProfile = () => {
               />
             </div>
 
-            {/* Company */}
+          
             <div>
               <label className="font-medium">
                 Company
@@ -271,14 +277,13 @@ export const EditProfile = () => {
               />
             </div>
 
-            {/* Error */}
+          
             {error && (
               <p className="text-red-500 text-sm">
                 {error}
               </p>
             )}
 
-            {/* Button */}
             <button
               type="submit"
               disabled={saving}

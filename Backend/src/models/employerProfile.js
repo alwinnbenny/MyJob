@@ -12,7 +12,10 @@ const employerProfileSchema = new mongoose.Schema(
     phone: String,
 
     company : String,
+
+    profileImage :String,
   },
+
   {
     timestamps: true,
   },

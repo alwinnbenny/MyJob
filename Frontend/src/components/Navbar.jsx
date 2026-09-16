@@ -7,6 +7,9 @@ import {
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../Context/UserContext";
+import { useState } from "react";
+import { useEffect } from "react";
+import { api } from "../config/axios";
 
 export const Navbar = () => {
 
@@ -18,13 +21,39 @@ export const Navbar = () => {
 ];
 const navigate = useNavigate();
 const {user} = useContext(UserContext)
+const [profileImage, setProfileImage] = useState(null);
+
+ useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const role = user?.role?.toLowerCase();
+
+        if (role === "employer") {
+          const response = await api.get("/api/job-portal/employer/profile");
+          setProfileImage(response.data?.profile?.profileImage || null);
+        } else if (role === "candidate") {
+          const response = await api.get("/api/job-portal/candidate/profile");
+          setProfileImage(response.data?.profileImage || null);
+        }
+      } catch {
+        setProfileImage(null);
+      }
+    };
+
+    if (user) fetchProfileImage();
+  }, [user]);
+
+
+
+
+
   return (
     <header className="w-full bg-white border-b border-gray-200 shadow-sm">
-      {/* Top Navigation Bar */}
+      
       <nav className="bg-gray-100 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 flex items-center h-11 relative">
 
-          {/* Centered Menu Links */}
+         
           <ul className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1 text-[15px]">
             {navLinks.map((link) => (
               <li key={link.path}>
@@ -67,7 +96,6 @@ const {user} = useContext(UserContext)
         </div>
       </nav>
 
-      {/* Bottom Navbar — Logo, Search, Buttons */}
       
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-17 gap-6">
 
@@ -129,17 +157,15 @@ const {user} = useContext(UserContext)
     >
       
       <div className="w-10 h-10 rounded-full bg-blue-100 overflow-hidden flex items-center justify-center">
-        {user.profileImage ? (
-          <img
-            src={user.profileImage}
-            alt={user.username}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <span className="text-blue-600 font-semibold text-lg">
-            {user.username?.charAt(0).toUpperCase()}
-          </span>
-        )}
+         {profileImage ? (
+                <img
+                  src={profileImage}
+                  alt="avatar"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span>{user?.username?.charAt(0).toUpperCase()}</span>
+              )}
       </div>
 
       
