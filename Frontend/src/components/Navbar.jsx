@@ -108,11 +108,11 @@ const [profileImage, setProfileImage] = useState(null);
           />
         </div>
 
-        {/* Search Bar */}
-        <div className="flex items-center border border-gray-100 overflow-hidden flex-1 max-w-167 h-12.5">
+       
+        {/* <div className="flex items-center border border-gray-100 overflow-hidden flex-1 max-w-167 h-12.5">
        
 
-          {/* Search Input */}
+          
           <div className="flex items-center flex-1 px-4 gap-3">
             <FaSearch className="text-gray-400 text-[13px] shrink-0" />
             <input
@@ -125,8 +125,8 @@ const [profileImage, setProfileImage] = useState(null);
 
           </div>
            
-        </div>
-         {/* Country Selector */}
+        </div> */}
+         
         <div className="flex items-center gap-2 px-4 py-3 border border-gray-200  shrink-0 cursor-pointer">
             <img
               src="https://flagcdn.com/w40/in.png"
