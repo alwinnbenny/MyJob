@@ -63,7 +63,7 @@ export const Hero = () => {
               onClick={()=>{
                 navigate(`/Findjob?keyword=${Keyword}&location=${location}`)
               }}
-              className="bg-red-600 hover:bg-blue-700 text-white px-8 py-4 font-semibold transition whitespace-nowrap cursor-pointer">
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-semibold transition whitespace-nowrap cursor-pointer">
                 Find Job
               </button>
             </div>
