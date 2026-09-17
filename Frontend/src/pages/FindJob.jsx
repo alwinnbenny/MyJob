@@ -8,12 +8,16 @@ import { Pagination } from "../components/Pagination";
 import { AdvancedFilter } from "../components/AdvancedFilter";
 
 export const Findjob = () => {
+  console.log('hii')
   const [searchparams] = useSearchParams()
   const [currentPage, setCurrentPage] = useState(1);
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
   const totalPages = 5;
 
-  // Filter state — initialized from URL params so Jobreuse only fetches once
+  console.log("The search is:",searchparams);
+  
+
+ 
   const [searchInput, setSearchInput] = useState(() => searchparams.get("keyword") || "");
   const [locationInput, setLocationInput] = useState(() => searchparams.get("location") || "");
   const [categoryInput, setCategoryInput] = useState("");
