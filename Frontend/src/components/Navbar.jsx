@@ -109,7 +109,7 @@ const [profileImage, setProfileImage] = useState(null);
         </div>
 
        
-        <div className="flex items-center border border-gray-100 overflow-hidden flex-1 max-w-167 h-12.5">
+        <div className="flex items-center overflow-hidden flex-1 max-w-167 h-12.5">
        
 
           

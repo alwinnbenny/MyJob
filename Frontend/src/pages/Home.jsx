@@ -18,8 +18,9 @@ export const Home = () => {
        <JobpilotWorking/>
        <PopularCategory/>
        <FeaturedJob/>
-       <Topcompanies/>
-       <Testimonials/>
+       {/* <Topcompanies/> */}
+       {/* <Testimonials/> */}
+       
        <Register/>
        <Footer/>
    

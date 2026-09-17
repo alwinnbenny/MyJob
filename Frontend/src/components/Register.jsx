@@ -9,7 +9,7 @@ export const Register = () => {
 
 
   return (
-    <section className="bg-white py-16 w-full min-h-122.5">
+    <section className="bg-white py-20 w-full min-h-122.5">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Candidate Card */}

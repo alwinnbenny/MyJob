@@ -28,10 +28,10 @@ export const PopularCategory = () => {
         {/* Heading */}
         <div className="flex justify-between items-center mb-16">
           <h2 className="text-5xl font-semibold">Popular category</h2>
-          <button className="flex items-center gap-3 border px-6 py-3 rounded-lg text-blue-600 hover:bg-blue-600 hover:text-white transition cursor-pointer">
+          {/* <button className="flex items-center gap-3 border px-6 py-3 rounded-lg text-blue-600 hover:bg-blue-600 hover:text-white transition cursor-pointer">
             View All
             <ArrowRight size={20} />
-          </button>
+          </button> */}
         </div>
 
         {/* Categories */}

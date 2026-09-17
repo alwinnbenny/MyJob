@@ -42,6 +42,8 @@ export const Findjob = () => {
     setCurrentPage(1);
   };
 
+
+  //for home filtering
   useEffect(()=>{
     const keyword = searchparams.get("keyword") || "";
     const location = searchparams.get("location") || "";

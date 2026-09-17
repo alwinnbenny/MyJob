@@ -34,7 +34,7 @@ export const Jobreuse = ({ filters = {} }) => {
           },
         });
 
-        console.log("RESPONSE:", response.data);
+        console.log("RESPONSE:", response.data);  
         setJobLists(
           Array.isArray(response.data)
             ? response.data
@@ -132,11 +132,11 @@ export const Jobreuse = ({ filters = {} }) => {
 
         <div className="flex justify-between items-center mb-16">
           <h2 className="text-5xl font-semibold">Featured Job</h2>
-
+{/* 
           <button className="flex items-center gap-3 border px-6 py-3 rounded-lg text-blue-600 hover:bg-blue-600 hover:text-white transition cursor-pointer">
             View All
             <ArrowRight size={20} />
-          </button>
+          </button> */}
         </div>
 
         {/* No jobs */}
@@ -212,7 +212,7 @@ export const Jobreuse = ({ filters = {} }) => {
                   </div>
 
                   <div className="flex items-center gap-3 self-start sm:self-center">
-                    <button
+                    {/* <button
                       className="p-2 border border-gray-200 rounded-md bg-[#E7F0FA] hover:text-[#0A65CC] transition-all cursor-pointer"
                       onClick={() => handleSaved(_id)}
                     >
@@ -221,7 +221,7 @@ export const Jobreuse = ({ filters = {} }) => {
                       ) : (
                         <Bookmark className="text-badge-foreground" size={20} />
                       )}
-                    </button>
+                    </button> */}
 
                     <button
                       className="flex items-center gap-2 bg-[#E7F0FA] text-[#0A65CC] px-6 py-3 hover:bg-[#0A65CC] hover:text-white transition-all cursor-pointer"
