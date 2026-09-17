@@ -24,12 +24,7 @@ export const Jobreuse = ({ filters = {} }) => {
     const fetchJobLists = async () => {
       try {
         setLoading(true);
-        setError("");
-        // const response = await api.get(
-        //   `/api/job-portal/candidate/joblist?keyword=${encodeURIComponent(filters.search || "")}&location=${encodeURIComponent(filters.location || "")}&category=${encodeURIComponent(filters.category || "")}`
-        // );
-
-        // console.log("joblistings:", response.data);
+      
         const response = await api.get("/api/job-portal/candidate/joblist", {
           params: {
             keyword: filters.search || "",

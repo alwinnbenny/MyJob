@@ -8,14 +8,14 @@ import { Pagination } from "../components/Pagination";
 import { AdvancedFilter } from "../components/AdvancedFilter";
 
 export const Findjob = () => {
-  console.log('hii')
+  
   const [searchparams] = useSearchParams()
   const [currentPage, setCurrentPage] = useState(1);
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
   const totalPages = 5;
 
-  console.log("The search is:",searchparams);
-  
+ 
+
 
  
   const [searchInput, setSearchInput] = useState(() => searchparams.get("keyword") || "");
@@ -168,7 +168,7 @@ export const Findjob = () => {
 
       <section className="bg-white py-8 w-full">
         <div className="max-w-7xl mx-auto px-6">
-          {/* <FilterBar /> */}
+       
           <Jobreuse filters={filters} />
           <Pagination
             currentPage={currentPage}
