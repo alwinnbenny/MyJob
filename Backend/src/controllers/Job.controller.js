@@ -86,7 +86,7 @@ export const postJob = async (req, res) => {
 
 export const getJobs = async (req, res) => {
   try {
-    const {keyword,location,category,company} = req.query;
+    const {keyword,location,category,company,page = 1,limit = 10} = req.query;
 
     
 
@@ -127,12 +127,31 @@ export const getJobs = async (req, res) => {
         $options : "i",
       }
     }
+
+    const pageNumber = Number(page);
+    const limitNumber = Number(limit);
+
+
+    const skip = (pageNumber -1)*limitNumber
+
+    const totalJobs = await Job.countDocuments(filter);
+
  
-    const posts = await Job.find(filter);
+    const posts = await Job.find(filter)
+    .skip(skip).limit(limitNumber).sort({createdAt: -1});
+
+    const totalPages = Math.ceil(totalJobs / limitNumber);
+
 
     res.status(200).json({
-      jobLists: posts
-    })
+      jobLists: posts,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages: totalPages,
+        totalJobs: totalJobs,
+        limit: limitNumber,
+      },
+    });
     
   } catch (error) {
     res.status(500).json({

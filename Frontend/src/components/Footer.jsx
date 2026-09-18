@@ -1,7 +1,11 @@
 import { BriefcaseBusiness } from "lucide-react";
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export const Footer = () => {
+
+  const navigate = useNavigate();
+
   return (
     <footer className="bg-black py-16 w-full min-h-122.5">
       <div className="max-w-7xl mx-auto px-6">
@@ -48,21 +52,24 @@ export const Footer = () => {
             <h3 className="text-white text-2xl font-medium mb-8">Candidate</h3>
 
             <ul className="space-y-5 text-[#767F8C]">
-              <li className="hover:text-white cursor-pointer transition">
+              <li
+              onClick={()=> navigate("/Findjob")}
+               className="hover:text-white cursor-pointer transition">
                 Browse Jobs
               </li>
 
-              <li className="hover:text-white cursor-pointer transition">
+              <li 
+              onClick={()=> navigate("/Employers")}
+              className="hover:text-white cursor-pointer transition">
                 Browse Employers
               </li>
 
-              <li className="hover:text-white cursor-pointer transition">
+              <li className="hover:text-white cursor-pointer transition"
+              onClick={()=> navigate("/Sign-in")}>
                 Candidate Dashboard
               </li>
 
-              <li className="hover:text-white cursor-pointer transition">
-                Saved Jobs
-              </li>
+              
             </ul>
           </div>
 

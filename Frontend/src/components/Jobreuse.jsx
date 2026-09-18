@@ -10,6 +10,8 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../Context/UserContext";
 import { api } from "../config/axios";
+import { Pagination } from "./Pagination";
+
 
 export const Jobreuse = ({ filters = {} }) => {
   const navigate = useNavigate();
@@ -17,6 +19,10 @@ export const Jobreuse = ({ filters = {} }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showPopup, setShowPopup] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const jobsPerPage = 10;
 
   const { user } = useContext(UserContext);
 
@@ -24,22 +30,25 @@ export const Jobreuse = ({ filters = {} }) => {
     const fetchJobLists = async () => {
       try {
         setLoading(true);
-      
+
         const response = await api.get("/api/job-portal/candidate/joblist", {
           params: {
             keyword: filters.search || "",
             location: filters.location || "",
             category: filters.category || "",
             company: filters.company || "",
+            page: currentPage,
+            limit: jobsPerPage,
           },
         });
 
-        console.log("RESPONSE:", response.data);  
+        console.log("RESPONSE:", response.data);
         setJobLists(
           Array.isArray(response.data)
             ? response.data
             : response.data.jobLists || [],
         );
+        setTotalPages(response.data.pagination?.totalPages || 1);
       } catch (error) {
         console.log(
           "Get my jobs error:",
@@ -52,7 +61,13 @@ export const Jobreuse = ({ filters = {} }) => {
     };
 
     fetchJobLists();
-  }, [filters.search, filters.location, filters.category, filters.company]);
+  }, [
+    filters.search,
+    filters.location,
+    filters.category,
+    filters.company,
+    currentPage,
+  ]);
 
   //get remaining days
 
@@ -132,7 +147,7 @@ export const Jobreuse = ({ filters = {} }) => {
 
         <div className="flex justify-between items-center mb-16">
           <h2 className="text-5xl font-semibold">Featured Job</h2>
-{/* 
+          {/* 
           <button className="flex items-center gap-3 border px-6 py-3 rounded-lg text-blue-600 hover:bg-blue-600 hover:text-white transition cursor-pointer">
             View All
             <ArrowRight size={20} />
@@ -235,6 +250,14 @@ export const Jobreuse = ({ filters = {} }) => {
               );
             })}
           </div>
+        )}
+
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+          />
         )}
       </div>
 

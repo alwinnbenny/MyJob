@@ -2,17 +2,14 @@ import { useEffect, useState } from "react";
 import { NavLink,  useSearchParams } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Search, MapPin, Layers, ChevronDown, X } from "lucide-react";
-import { FilterBar } from "../components/Filterbar";
 import { Jobreuse } from "../components/Jobreuse";
-import { Pagination } from "../components/Pagination";
 import { AdvancedFilter } from "../components/AdvancedFilter";
 
 export const Findjob = () => {
   
   const [searchparams] = useSearchParams()
-  const [currentPage, setCurrentPage] = useState(1);
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
-  const totalPages = 5;
+  
 
  
 
@@ -31,7 +28,7 @@ export const Findjob = () => {
 
   const handleSearch = () => {
     setFilters({ search: searchInput.trim(), location: locationInput.trim(), category: categoryInput });
-    setCurrentPage(1);
+    
   };
 
   const handleClear = () => {
@@ -39,7 +36,7 @@ export const Findjob = () => {
     setLocationInput("");
     setCategoryInput("");
     setFilters({ search: "", location: "", category: "" });
-    setCurrentPage(1);
+    
   };
 
 
@@ -59,7 +56,7 @@ export const Findjob = () => {
       company: company,
     });
 
-    setCurrentPage(1);
+    
 
   },[searchparams])
 
@@ -172,11 +169,7 @@ export const Findjob = () => {
         <div className="max-w-7xl mx-auto px-6">
        
           <Jobreuse filters={filters} />
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            setCurrentPage={setCurrentPage}
-          />
+        
         </div>
       </section>
 

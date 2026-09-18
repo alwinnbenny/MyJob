@@ -166,10 +166,7 @@ export const getEmployers = async (req, res) => {
   try {
     const { keyword } = req.query;
 
-    console.log("Employer filters:", {
-      keyword
-      
-    });
+  
 
     const filter = {};
 
