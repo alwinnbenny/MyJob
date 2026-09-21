@@ -174,11 +174,11 @@ const [applicants, setApplicants] = useState([]);
                   </div>
 
                   <div className="flex justify-end mt-6">
-                    <button
+                    {/* <button
                       className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg"
                     >
                       View Application
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               ))}
