@@ -95,7 +95,7 @@ export const getJobs = async (req, res) => {
     filter.deadline = {
       $gt: new Date()
     }
-    console.log(filter);
+    
 
      if(company){
       filter.company = {

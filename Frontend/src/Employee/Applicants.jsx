@@ -82,7 +82,7 @@ const [applicants, setApplicants] = useState([]);
                 >
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      <img
+                      {/* <img
                         src={
                           applicant.candidate?.profileImage ||
                           "/default-profile.png"
@@ -92,7 +92,7 @@ const [applicants, setApplicants] = useState([]);
                           "Applicant"
                         }
                         className="w-14 h-14 rounded-lg object-cover"
-                      />
+                      /> */}
 
                       <div>
                         <div className="flex items-center gap-3 mb-2">
