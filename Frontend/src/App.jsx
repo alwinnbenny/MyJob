@@ -23,6 +23,7 @@ import { ProtectedRoute } from "./Routes/ProtectedRoute";
 import { GuestRoute } from "./Routes/GuestRoute";
 import { JobDetailed } from "./pages/JobDetailed";
 import { EditJob } from "./Employee/EditJob";
+import { SavedJobs } from "./Candidate/SavedJobs";
 
 
 function App() {
@@ -56,6 +57,8 @@ function App() {
       <Route path="/candidate/view-profile" element={<ProtectedRoute><CandidateViewProfile /></ProtectedRoute>} />
       <Route path="/candidate/edit-profile" element={<ProtectedRoute><CandidateEditProfile /></ProtectedRoute>} />
       <Route path="/Candidates" element={<ProtectedRoute><Candidates /></ProtectedRoute>} />
+      <Route path="/savedjobs" element={<ProtectedRoute><SavedJobs /></ProtectedRoute>} />
+
     </Routes>
   );
 }

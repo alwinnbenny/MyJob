@@ -204,7 +204,8 @@ export const FeaturedJob = () => {
                   </div>
 
                   <div className="flex items-center gap-3 self-start sm:self-center">
-                    {/* <button
+                    {user &&(
+                      <button
                       className="p-2 border border-gray-200 rounded-md bg-[#E7F0FA] hover:text-[#0A65CC] transition-all cursor-pointer"
                       onClick={() => handleSaved(_id)}
                     >
@@ -213,7 +214,8 @@ export const FeaturedJob = () => {
                       ) : (
                         <Bookmark className="text-badge-foreground" size={20} />
                       )}
-                    </button> */}
+                    </button>
+                    )}
 
                     <button
                       className="flex items-center gap-2 bg-[#E7F0FA] text-[#0A65CC] px-6 py-3 hover:bg-[#0A65CC] hover:text-white transition-all cursor-pointer"

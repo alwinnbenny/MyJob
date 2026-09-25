@@ -17,6 +17,7 @@ export const Navbar = () => {
   { name: "Home", path: "/" },
   { name: "Find Job", path: "/Findjob" },
   { name: "Employers", path: "/Employers" },
+  { name: "Saved Jobs", path: "/Savedjobs" },
  
 ];
 const navigate = useNavigate();

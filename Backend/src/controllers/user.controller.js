@@ -2,6 +2,7 @@ import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import { GenerateToken } from "../utils/generateToken.js";
 import crypto from "crypto";
+import { OAuth2Client } from "google-auth-library";
 
 export const createAccount = async (req, res) => {
   try {
@@ -266,6 +267,112 @@ export const updateUser = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: error.message,
+    });
+  }
+};
+
+//google OAuth
+
+
+const googleClient = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID
+);
+
+export const googleLogin = async (req, res) => {
+  try {
+    const { credential } = req.body;
+
+    if (!credential) {
+      return res.status(400).json({
+        message: "Google credential is required",
+      });
+    }
+
+    
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();//details about the user 
+
+    const {
+      sub,
+      email,
+      name,
+      picture,
+    } = payload;
+
+    if (!email) {
+      return res.status(400).json({
+        message: "Google account email not available",
+      });
+    }
+
+  
+    let user = await User.findOne({
+      email: email.toLowerCase(),
+    });
+
+    // Create new user if not found
+    if (!user) {
+      let username = email
+        .split("@")[0]
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
+
+     
+      const existingUsername = await User.findOne({
+        username,
+      });
+
+      if (existingUsername) {
+        username = `${username}${Date.now()}`;
+      }
+
+      user = await User.create({
+        fullname: name || username,
+        username,
+        email: email.toLowerCase(),
+        googleId: sub,
+        role: "candidate",
+      });
+    } else {
+
+      // If existing user doesn't have googleId,
+
+      // connect the Google account to it.
+
+      if (!user.googleId) {
+        user.googleId = sub;
+        await user.save();
+      }
+    }
+
+   
+    const token = GenerateToken(user, res);
+
+    return res.status(200).json({
+      message: "Google login successful",
+
+      user: {
+        id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+        username: user.username,
+        role: user.role,
+        profileImage: picture || null,
+      },
+
+      token,
+    });
+
+  } catch (error) {
+    console.error("GOOGLE LOGIN ERROR:", error);
+
+    return res.status(500).json({
+      message: "Google authentication failed",
+      error: error.message,
     });
   }
 };

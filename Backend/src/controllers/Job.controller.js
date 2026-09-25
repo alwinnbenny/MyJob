@@ -1,6 +1,7 @@
 import { EmployerProfile } from "../models/employerProfile.js";
 import { Application } from "../models/application.model.js";
 import { Job } from "../models/postjob.model.js";
+import { SavedJob } from "../models/savedJob.model.js";
 
 export const postJob = async (req, res) => {
   try {
@@ -86,65 +87,88 @@ export const postJob = async (req, res) => {
 
 export const getJobs = async (req, res) => {
   try {
-    const {keyword,location,category,company,page = 1,limit = 10} = req.query;
-
-    
+    const {
+      keyword,
+      location,
+      category,
+      company,
+      sortBy,
+      page = 1,
+      limit = 10,
+    } = req.query;
 
     const filter = {};
 
     filter.deadline = {
-      $gt: new Date()
-    }
-    
+      $gt: new Date(),
+    };
 
-     if(company){
+    if (company) {
       filter.company = {
-        $regex : company,
-        $options : "i",
-      }
+        $regex: company,
+        $options: "i",
+      };
     }
-    
 
-    if(keyword){
+    if (keyword) {
       filter.$or = [
-        {title : {$regex : keyword, $options: "i"}},
-        {company : {$regex : keyword, $options: "i"}},
-        
+        { title: { $regex: keyword, $options: "i" } },
+        { company: { $regex: keyword, $options: "i" } },
       ];
     }
 
-    if(location){
+    if (location) {
       filter.location = {
-        $regex : location,
-        $options : "i",
-      }
+        $regex: location,
+        $options: "i",
+      };
     }
 
-
-    if(category){
+    if (category) {
       filter.category = {
-        $regex : category,
-        $options : "i",
-      }
+        $regex: category,
+        $options: "i",
+      };
     }
 
     const pageNumber = Number(page);
     const limitNumber = Number(limit);
 
-
-    const skip = (pageNumber -1)*limitNumber
+    const skip = (pageNumber - 1) * limitNumber;
 
     const totalJobs = await Job.countDocuments(filter);
+//acending or descending
+    const sortOrder = sortBy === "oldest" ? 1 : -1;
 
- 
     const posts = await Job.find(filter)
-    .skip(skip).limit(limitNumber).sort({createdAt: -1});
+      .skip(skip)
+      .limit(limitNumber)
+      .sort({ createdAt: sortOrder });
 
     const totalPages = Math.ceil(totalJobs / limitNumber);
 
+    let savedJobIds = [];
+
+    if (req.user?._id) {
+      const savedJobs = await SavedJob.find({
+        user: req.user._id,
+        job: { $in: posts.map((job) => job._id) },
+      }).select("job");
+
+      savedJobIds = savedJobs.map((saved) =>
+        saved.job.toString()
+      );
+    }
+
+    const jobs = posts.map((job) => ({
+      ...job.toObject(),
+      isSaved: savedJobIds.includes(
+        job._id.toString()
+      ),
+    }));
 
     res.status(200).json({
-      jobLists: posts,
+      jobLists: jobs,
       pagination: {
         currentPage: pageNumber,
         totalPages: totalPages,
@@ -152,7 +176,6 @@ export const getJobs = async (req, res) => {
         limit: limitNumber,
       },
     });
-    
   } catch (error) {
     res.status(500).json({
       message: "Internal Server Error",
@@ -160,13 +183,6 @@ export const getJobs = async (req, res) => {
     });
   }
 };
-
-
-
-
-
-
-
 
 // get job by person id-means posted person could see the jobs
 
@@ -220,7 +236,6 @@ export const updateJob = async (req, res) => {
   try {
     const { id } = req.params;
 
-  
     const job = await Job.findById(id);
 
     if (!job) {
@@ -372,6 +387,82 @@ export const getEmployerStats = async (req, res) => {
       },
     });
   } catch (error) {
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+//saved Jobs
+
+export const savedJobs = async (req, res) => {
+  try {
+    const { jobId } = req.params;
+    const userId = req.user._id;
+
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      res.status(404).json({
+        message: "Job not Found",
+      });
+    }
+
+    const existingSavedJob = await SavedJob.findOne({
+      user: userId,
+      job: jobId,
+    });
+
+    if (existingSavedJob) {
+      await SavedJob.findByIdAndDelete(existingSavedJob._id);
+
+      return res.status(200).json({
+        message: "Job removed from savedjobs",
+        isSaved: false,
+      });
+    }
+
+    await SavedJob.create({
+      user: userId,
+      job: jobId,
+    });
+
+    return res.status(201).json({
+      message: "Job saved successfully",
+      isSaved: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+//get saved jobs
+
+export const getSavedJobs = async (req, res) => {
+  try {
+    const savedJobs = await SavedJob.find({
+      user: req.user._id,
+    })
+      .populate("job")
+      .sort({ createdAt: -1 });
+
+    const jobs = savedJobs
+      .filter((saved) => saved.job)
+      .map((saved) => ({
+        ...saved.job.toObject(),
+        isSaved: true,
+      }));
+
+    return res.status(200).json({
+      jobs,
+    });
+  } catch (error) {
+    console.log("Get saved jobs error:", error);
+
     return res.status(500).json({
       message: "Internal Server Error",
       error: error.message,

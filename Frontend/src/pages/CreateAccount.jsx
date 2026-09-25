@@ -2,8 +2,10 @@ import { ArrowRight, Eye, ChevronDown, EyeOff } from "lucide-react";
 import { FaFacebookF, FaGoogle } from "react-icons/fa";
 import { LoginNav } from "../components/LoginNav";
 import { useNavigate, NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useContext } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../config/axios.js";
+import { UserContext } from "../Context/UserContext.jsx";
 
 export const Createaccount = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,6 +30,7 @@ export const Createaccount = () => {
   });
 
   const navigate = useNavigate();
+   const { login } = useContext(UserContext);
 
   const validate = () => {
     const newErrors = {};
@@ -64,6 +67,64 @@ export const Createaccount = () => {
     setErrors(newErrors);
     return isValid;
   };
+
+  useEffect(() => {
+      if (!window.google) return;
+  
+      window.google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        callback: async (response) => {
+          await handleGoogleLogin(response);
+        },
+      });
+  
+      window.google.accounts.id.renderButton(
+        document.getElementById("googleButton"),
+        {
+          theme: "outline",
+          size: "large",
+          width: 250,
+          
+          text: "signin_with",
+        }
+      );
+    }, []);
+
+ const handleGoogleLogin = async (response) => {
+    try {
+      const result = await api.post("/api/job-portal/google", {
+        credential: response.credential,
+      });
+
+      console.log("google response", result.data)
+
+      const user = result.data.user;
+      const token = result.data.token;
+
+
+      login(user, token);
+
+
+      if (user.role === "employer") {
+        navigate("/Dashboard", { replace: true });
+      } else if (user.role === "candidate") {
+        navigate("/", { replace: true });
+      }
+
+    } catch (error) {
+      console.error(
+        "Google login error:",
+        error.response?.data || error.message
+      );
+
+      setErrors({
+        login:
+          error.response?.data?.message ||
+          "Google login failed",
+      });
+    }
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -285,9 +346,10 @@ export const Createaccount = () => {
             <span className="text-[#5E6670]">Sign up with Facebook</span>
           </button>
 
-          <button className="h-12 border border-secondary rounded-sm flex items-center justify-center gap-3 hover:bg-gray-50 transition cursor-pointer">
-            <FaGoogle className="text-[#1877F2] text-xl" />
-            <span className="text-[#5E6670]">Sign up with Google</span>
+          <button
+            id="googleButton"
+          >
+
           </button>
         </div>
       </div>

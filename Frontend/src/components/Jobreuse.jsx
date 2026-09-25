@@ -7,7 +7,7 @@ import {
   X,
 } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { UserContext } from "../Context/UserContext";
 import { api } from "../config/axios";
 import { Pagination } from "./Pagination";
@@ -26,6 +26,9 @@ export const Jobreuse = ({ filters = {} }) => {
 
   const { user } = useContext(UserContext);
 
+  const [searchParams] = useSearchParams();
+  const sortBy = searchParams.get("sort") || "latest";
+
   useEffect(() => {
     const fetchJobLists = async () => {
       try {
@@ -37,6 +40,7 @@ export const Jobreuse = ({ filters = {} }) => {
             location: filters.location || "",
             category: filters.category || "",
             company: filters.company || "",
+            sortBy,
             page: currentPage,
             limit: jobsPerPage,
           },
@@ -67,6 +71,7 @@ export const Jobreuse = ({ filters = {} }) => {
     filters.category,
     filters.company,
     currentPage,
+    sortBy,
   ]);
 
   //get remaining days
@@ -105,18 +110,39 @@ export const Jobreuse = ({ filters = {} }) => {
     navigate(`/job/${_id}`);
   };
 
-  const handleSaved = (id) => {
+
+
+  const handleSaved = async (id) => {
+  try {
+    if (!user) {
+      setShowPopup(true);
+      return;
+    }
+
+    const response = await api.post(
+      `/api/job-portal/candidate/savejob/${id}`
+    );
+
+    console.log("Save response:", response.data);
+
     setJobLists((prevJobs) =>
       prevJobs.map((job) =>
         job._id === id
           ? {
               ...job,
-              isSaved: !job.isSaved,
+              isSaved: response.data.isSaved,
             }
-          : job,
-      ),
+          : job
+      )
     );
-  };
+
+  } catch (error) {
+    console.log(
+      "Save job error:",
+      error.response?.data || error.message
+    );
+  }
+};
 
   const filteredJobs = jobLists;
 
@@ -227,7 +253,9 @@ export const Jobreuse = ({ filters = {} }) => {
                   </div>
 
                   <div className="flex items-center gap-3 self-start sm:self-center">
-                    {/* <button
+
+                    {user && (
+                      <button
                       className="p-2 border border-gray-200 rounded-md bg-[#E7F0FA] hover:text-[#0A65CC] transition-all cursor-pointer"
                       onClick={() => handleSaved(_id)}
                     >
@@ -236,7 +264,8 @@ export const Jobreuse = ({ filters = {} }) => {
                       ) : (
                         <Bookmark className="text-badge-foreground" size={20} />
                       )}
-                    </button> */}
+                    </button>
+                  )}
 
                     <button
                       className="flex items-center gap-2 bg-[#E7F0FA] text-[#0A65CC] px-6 py-3 hover:bg-[#0A65CC] hover:text-white transition-all cursor-pointer"

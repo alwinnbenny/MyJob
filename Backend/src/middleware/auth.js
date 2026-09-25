@@ -3,7 +3,7 @@ import { User } from "../models/user.model.js";
 
 //read the token from the request
 //check if token is valid
-export const verifyJWT= async (req, res, next) => {
+export const verifyJWT = async (req, res, next) => {
   let token;
 
   if (
@@ -32,11 +32,43 @@ export const verifyJWT= async (req, res, next) => {
       });
     req.user = user;
     next();
-    
   } catch (error) {
     res.status(500).json({ error: "Not authorized,token failed " });
   }
 };
+
+export const optionalVerifyJWT = async (req, res, next) => {
+  try {
+    const token =
+      req.cookies?.jwt ||
+      req.header("Authorization")?.replace("Bearer ", "");
+
+    if (!token) {
+      req.user = null;
+      return next();
+    }
+
+    const decodedToken = jwt.verify(
+      token,
+      process.env.JWT_SECRET_KEY
+    );
+
+    const user = await User.findById(decodedToken.id).select(
+      "-password"
+    );
+
+    req.user = user || null;
+
+    next();
+  } catch (error) {
+   
+    req.user = null;
+    next();
+  }
+};
+
+
+
 
 export const isEmployee = (req, res, next) => {
   if (req.user.role !== "employer") {

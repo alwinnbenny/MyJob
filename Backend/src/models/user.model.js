@@ -18,7 +18,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      
       maxLength: 100,
     },
     email: {
@@ -27,6 +27,12 @@ const userSchema = new Schema(
       lowercase: true,
       unique: true,
       trim: true,
+    },
+
+    googleId : {
+      type : String,
+      unique: true,
+      sparse : true,
     },
     role: {
       type: String,

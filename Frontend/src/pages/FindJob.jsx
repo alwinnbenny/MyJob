@@ -4,17 +4,13 @@ import { Navbar } from "../components/Navbar";
 import { Search, MapPin, Layers, ChevronDown, X } from "lucide-react";
 import { Jobreuse } from "../components/Jobreuse";
 import { AdvancedFilter } from "../components/AdvancedFilter";
+import { FilterBar } from "../components/Filterbar";
 
 export const Findjob = () => {
   
   const [searchparams] = useSearchParams()
-  const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
-  
-
- 
-
-
- 
+   const sortBy = searchparams.get("sort") || "latest";
+  const [showAdvancedFilter, setShowAdvancedFilter] = useState(false); 
   const [searchInput, setSearchInput] = useState(() => searchparams.get("keyword") || "");
   const [locationInput, setLocationInput] = useState(() => searchparams.get("location") || "");
   const [categoryInput, setCategoryInput] = useState("");
@@ -95,7 +91,7 @@ export const Findjob = () => {
               />
             </div>
 
-            <div className="h-10 border-l"></div>
+            <div className="h-10 "></div>
 
             {/* Location */}
             <div className="flex items-center flex-1 gap-3 px-4">
@@ -109,7 +105,7 @@ export const Findjob = () => {
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               />
             </div>
-            {/* Select Category */}
+          
 
             <div className="relative flex items-center flex-1 gap-3 px-4">
               <Layers size={22} className="text-blue-600" />
@@ -167,7 +163,7 @@ export const Findjob = () => {
 
       <section className="bg-white py-8 w-full">
         <div className="max-w-7xl mx-auto px-6">
-       
+          <FilterBar/>
           <Jobreuse filters={filters} />
         
         </div>
